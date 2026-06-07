@@ -1,0 +1,379 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+*********************************************************************
+XML Schema for capturing the Metadata Binding specification for
+binding metadata to data objects.
+   I
+  / \
+-< + >-
+  \ /
+   I            NCI AGENCY
+##   #  ####  # P.O. box 174
+##   # #    # # 2501 CD The Hague
+# #  # #      #
+#  # # #    # # Core Enterprise Services
+#   ##  ####  #
+  A G E N C Y
+*********************************************************************
+-->
+<xs:schema
+	xmlns:ds="http://www.w3.org/2000/09/xmldsig#"
+	xmlns:mb="urn:nato:stanag:4778:bindinginformation:1:0"
+	xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-Instance"
+	xmlns:xmime="http://www.w3.org/2005/05/xmlmime"
+	xmlns:xml="http://www.w3.org/XML/1998/namespace"
+	targetNamespace="urn:nato:stanag:4778:bindinginformation:1:0"
+	elementFormDefault="qualified"
+	attributeFormDefault="unqualified"
+	version="1.4">
+	<xs:annotation>
+		<xs:documentation>STANAG 4778 Binding Information</xs:documentation>
+		<xs:appinfo>
+			<s4778:BindingInformation
+				xmlns:s4778-ext="urn:nato:stanag:4778:bindinginformation:extensions:1:0"
+				xmlns:s4774="urn:nato:stanag:4774:confidentialitymetadatalabel:1:0"
+				xmlns:s4778="urn:nato:stanag:4778:bindinginformation:1:0"
+				xmlns:s5636="urn:nato:stanag:5636:A:1:elements"
+				xml:id="ncms-metadata"
+				s4778-ext:profile="urn:nato:stanag:4778:profile:xml:schema:1:0">
+				<s4778:MetadataBindingContainer>
+					<s4778:MetadataBinding>
+						<s4778:Metadata>
+							<s4774:originatorConfidentialityLabel
+								ReviewDateTime="2027-02-08T16:11:43Z">
+								<s4774:ConfidentialityInformation>
+									<s4774:PolicyIdentifier>PUBLIC</s4774:PolicyIdentifier>
+									<s4774:Classification>UNMARKED</s4774:Classification>
+								</s4774:ConfidentialityInformation>
+								<s4774:OriginatorID
+									IDType="uniformResourceIdentifier">https://www.ncia.nato.int/</s4774:OriginatorID>
+								<s4774:CreationDateTime>2017-02-08T16:11:43Z</s4774:CreationDateTime>
+							</s4774:originatorConfidentialityLabel>
+						</s4778:Metadata>
+						<s4778:Metadata>
+							<s5636:Title>Metadata Binding Schema</s5636:Title>
+						</s4778:Metadata>
+						<s4778:Metadata>
+							<s5636:Creator
+								type="organization">NATO Communications and Information Agency</s5636:Creator>
+						</s4778:Metadata>
+						<s4778:Metadata>
+							<s5636:Publisher
+								type="organization">NATO Communications and Information Agency</s5636:Publisher>
+						</s4778:Metadata>
+						<s4778:Metadata>
+							<s5636:Identifier>urn:nato:stanag:4778:bindinginformation:1:0</s5636:Identifier>
+						</s4778:Metadata>
+						<s4778:Metadata>
+							<s5636:DateCreated>2020-06-04T12:00:00Z</s5636:DateCreated>
+						</s4778:Metadata>
+						<s4778:DataReference
+							URI=""/>
+					</s4778:MetadataBinding>
+				</s4778:MetadataBindingContainer>
+				<s5636bp:BindingInformationContainer
+					xmlns:s5636bp="urn:nato:stanag:5636:A:1:bindingprofile:bdo">
+					<s4778:BindingInformation
+						s4778-ext:profile="urn:nato:stanag:5636:A:1:bindingprofile:bdo">
+						<s4778:MetadataBindingContainer>
+							<s4778:MetadataBinding>
+								<!--This is the NCMS "metadataConfidentialityLabel"-->
+								<s4778:Metadata>
+									<s4774:originatorConfidentialityLabel>
+										<s4774:ConfidentialityInformation
+											ReviewDateTime="2027-02-08T16:11:43Z">
+											<s4774:PolicyIdentifier>PUBLIC</s4774:PolicyIdentifier>
+											<s4774:Classification>UNMARKED</s4774:Classification>
+										</s4774:ConfidentialityInformation>
+										<s4774:OriginatorID
+											IDType="uniformResourceIdentifier">https://www.ncia.nato.int/</s4774:OriginatorID>
+										<s4774:CreationDateTime>2017-02-08T16:11:43Z</s4774:CreationDateTime>
+									</s4774:originatorConfidentialityLabel>
+								</s4778:Metadata>
+								<s4778:DataReference
+									URI="">
+									<ds:Transforms>
+										<ds:Transform
+											Algorithm="http://www.w3.org/TR/1999/REC-xpath-19991116">
+											<!--XPath could/should also check the namespaces.-->
+											<ds:XPath>ancestor-or-self:*[local-name()='Metadata' or local-name()='MetadataReference'] and not ancestor-of-self:*[local-name()='BindingInformationContainer']</ds:XPath>
+										</ds:Transform>
+									</ds:Transforms>
+								</s4778:DataReference>
+							</s4778:MetadataBinding>
+						</s4778:MetadataBindingContainer>
+					</s4778:BindingInformation>
+				</s5636bp:BindingInformationContainer>
+			</s4778:BindingInformation>
+		</xs:appinfo>
+	</xs:annotation>
+	<xs:annotation>
+		<xs:appinfo>
+			<UniqueIdentifier>urn:nato:stanag:4778:bindinginformation:1:0</UniqueIdentifier>
+			<Name>Metadata Binding Schema</Name>
+			<Definition>Schema for binding metadata to data objects</Definition>
+			<VersionIndicator>1.4</VersionIndicator>
+			<UsageGuidance>Used within NATO to bind metadata to data objects, including the NATO Core Metadata.</UsageGuidance>
+			<RestrictionType/>
+			<RestrictionValue/>
+		</xs:appinfo>
+		<xs:documentation>
+   The schema can be used with the confidentiality label schema to bind confidentiality label metadata (such as those defined in the NATO Core Metadata Specification NCMS)) to data objects.
+  </xs:documentation>
+	</xs:annotation>
+	<xs:import
+		namespace="http://www.w3.org/2000/09/xmldsig#"
+		schemaLocation="xmldsig-core-schema.xsd"/>
+	<xs:import
+		namespace="http://www.w3.org/2005/05/xmlmime"
+		schemaLocation="xmlmime.xsd"/>
+	<xs:element
+		name="BindingInformation"
+		type="mb:BindingInformationType"/>
+	<xs:complexType
+		name="BindingInformationType"
+		id="bindingInformationType">
+		<xs:annotation>
+			<xs:appinfo>
+				<UniqueIdentifier>urn:nato:stanag:4778:bindinginformation:1:0:appinfo:bindingInformationType</UniqueIdentifier>
+				<Name>Binding Information Type</Name>
+				<Definition/>
+				<VersionIndicator>1.2</VersionIndicator>
+				<UsageGuidance>Used to bind arbitary metadata to data objects</UsageGuidance>
+				<RestrictionValue/>
+			</xs:appinfo>
+			<xs:documentation/>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element
+				ref="ds:Signature"
+				minOccurs="0"
+				maxOccurs="unbounded"/>
+			<xs:element
+				ref="mb:MetadataBindingContainer"
+				maxOccurs="unbounded"/>
+			<xs:any
+				namespace="##other"
+				processContents="lax"
+				minOccurs="0"
+				maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:anyAttribute
+			processContents="lax"/>
+	</xs:complexType>
+	<xs:element
+		name="MetadataBindingContainer"
+		type="mb:MetadataBindingContainerType"/>
+	<xs:complexType
+		name="MetadataBindingContainerType"
+		id="metadataBindingContainerType">
+		<xs:annotation>
+			<xs:appinfo>
+				<UniqueIdentifier>urn:nato:stanag:4778:bindinginformation:1:0:appinfo:metadataBindingContainerType</UniqueIdentifier>
+				<Name>Metadata Binding Container Type</Name>
+				<Definition>A sequence of Metadata Bindings</Definition>
+				<VersionIndicator>1.2</VersionIndicator>
+				<UsageGuidance/>
+				<RestrictionType/>
+				<RestrictionValue/>
+			</xs:appinfo>
+			<xs:documentation/>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element
+				ref="mb:MetadataBinding"
+				maxOccurs="unbounded"/>
+			<xs:any
+				namespace="##other"
+				processContents="lax"
+				minOccurs="0"
+				maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute
+			name="Id"
+			type="xs:ID"/>
+		<xs:anyAttribute
+			processContents="lax"/>
+	</xs:complexType>
+	<xs:element
+		name="MetadataBinding"
+		type="mb:MetadataBindingType"/>
+	<xs:complexType
+		name="MetadataBindingType"
+		id="metadataBindingType">
+		<xs:annotation>
+			<xs:appinfo>
+				<UniqueIdentifier>urn:nato:stanag:4778:bindinginformation:1:0:appinfo:metadataBindingType</UniqueIdentifier>
+				<Name>Metadata Binding Type</Name>
+				<Definition>A binding between metadata and data objects.</Definition>
+				<VersionIndicator>1.2</VersionIndicator>
+				<UsageGuidance/>
+				<RestrictionType/>
+				<RestrictionValue/>
+			</xs:appinfo>
+			<xs:documentation/>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:choice
+				maxOccurs="unbounded">
+				<xs:element
+					ref="mb:Metadata"/>
+				<xs:element
+					ref="mb:MetadataReference"/>
+			</xs:choice>
+			<xs:choice
+				maxOccurs="unbounded">
+				<xs:element
+					ref="mb:Data"/>
+				<xs:element
+					ref="mb:DataReference"/>
+			</xs:choice>
+		</xs:sequence>
+		<xs:attribute
+			name="Id"
+			type="xs:ID"/>
+		<xs:anyAttribute
+			processContents="lax"/>
+	</xs:complexType>
+	<xs:element
+		name="Metadata"
+		type="mb:MetadataType"/>
+	<xs:complexType
+		name="MetadataType"
+		id="metadataType"
+		mixed="true">
+		<xs:annotation>
+			<xs:appinfo>
+				<UniqueIdentifier>urn:nato:stanag:4778:bindinginformation:1:0:appinfo:metadataType</UniqueIdentifier>
+				<Name>Metadata Type</Name>
+				<Definition>In-line metadata.</Definition>
+				<VersionIndicator>1.3</VersionIndicator>
+				<UsageGuidance/>
+				<RestrictionType/>
+				<RestrictionValue/>
+			</xs:appinfo>
+			<xs:documentation/>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:any
+				namespace="##any"
+				processContents="lax"/>
+		</xs:sequence>
+		<xs:attribute
+			ref="xmime:contentType"/>
+		<xs:attribute
+			name="encoding"/>
+		<xs:anyAttribute
+			processContents="lax"/>
+	</xs:complexType>
+	<xs:element
+		name="MetadataReference"
+		type="mb:MetadataReferenceType"/>
+	<xs:complexType
+		name="MetadataReferenceType"
+		id="metadataReferenceType">
+		<xs:annotation>
+			<xs:appinfo>
+				<UniqueIdentifier>urn:nato:stanag:4778:bindinginformation:1:0:appinfo:metadataReferenceType</UniqueIdentifier>
+				<Name>Metadata Reference Type</Name>
+				<Definition>A reference to a piece of metadata.</Definition>
+				<VersionIndicator>1.2</VersionIndicator>
+				<UsageGuidance/>
+				<RestrictionType/>
+				<RestrictionValue/>
+			</xs:appinfo>
+			<xs:documentation/>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension
+				base="mb:ReferenceType"/>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element
+		name="Data"
+		type="mb:DataType"/>
+	<xs:complexType
+		name="DataType"
+		id="dataType"
+		mixed="true">
+		<xs:annotation>
+			<xs:appinfo>
+				<UniqueIdentifier>urn:nato:stanag:4778:bindinginformation:1:0:appinfo:dataType</UniqueIdentifier>
+				<Name>Data Type</Name>
+				<Definition>In-line data object.</Definition>
+				<VersionIndicator>1.2</VersionIndicator>
+				<UsageGuidance/>
+				<RestrictionType/>
+				<RestrictionValue/>
+			</xs:appinfo>
+			<xs:documentation/>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:any
+				namespace="##any"
+				processContents="lax"/>
+		</xs:sequence>
+		<xs:attribute
+			ref="xmime:contentType"/>
+		<xs:attribute
+			name="encoding"/>
+		<xs:anyAttribute
+			processContents="lax"/>
+	</xs:complexType>
+	<xs:element
+		name="DataReference"
+		type="mb:dataReferenceType"/>
+	<xs:complexType
+		name="dataReferenceType"
+		id="dataReferenceType">
+		<xs:annotation>
+			<xs:appinfo>
+				<UniqueIdentifier>urn:nato:stanag:4778:bindinginformation:1:0:appinfo:dataReferenceType</UniqueIdentifier>
+				<Name>Data Reference Type</Name>
+				<Definition>A reference to a data object.</Definition>
+				<VersionIndicator>1.1</VersionIndicator>
+				<UsageGuidance/>
+				<RestrictionType/>
+				<RestrictionValue/>
+			</xs:appinfo>
+			<xs:documentation/>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension
+				base="mb:ReferenceType"/>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType
+		name="ReferenceType"
+		id="referenceType">
+		<xs:annotation>
+			<xs:appinfo>
+				<UniqueIdentifier>urn:nato:stanag:4778:bindinginformation:1:0:appinfo:referenceType</UniqueIdentifier>
+				<Name>Reference Type</Name>
+				<Definition>A reference to a data object, or part of a data object.</Definition>
+				<VersionIndicator>1.2</VersionIndicator>
+				<UsageGuidance/>
+				<RestrictionType/>
+				<RestrictionValue/>
+			</xs:appinfo>
+			<xs:documentation/>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element
+				ref="ds:Transforms"
+				minOccurs="0"
+				maxOccurs="1"/>
+		</xs:sequence>
+		<xs:attribute
+			name="URI"
+			type="xs:anyURI"
+			use="required"/>
+		<xs:attribute
+			ref="xmime:contentType"/>
+		<xs:attribute
+			name="encoding"/>
+		<xs:anyAttribute
+			processContents="lax"/>
+	</xs:complexType>
+</xs:schema>

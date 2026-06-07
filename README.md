@@ -27,5 +27,8 @@ libboost-all-dev
 ninja-build
 
 
+## External Resources
 
+- nl-cl.xsd [ADatP-4774.5 EDA V1.zip](https://nso.nato.int/nso/nsdd/main/standards/srd-details/245/EN)
+- nl-mb.xsd [ADatP-4774.5 EDA V1.zip](https://nso.nato.int/nso/nsdd/main/standards/srd-details/245/EN)
 
