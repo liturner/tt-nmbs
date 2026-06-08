@@ -22,9 +22,9 @@ include(CMakePackageConfigHelpers)
 
 set(Boost_USE_STATIC_LIBS ON)
 
-find_package(exiv2 "0.28.5" REQUIRED)
+find_package(exiv2 "0.28.5" REQUIRED CONFIG)                      # libexiv2-dev
 find_package(Boost "1.83.0" REQUIRED CONFIG)                      # libboost-all-dev
-find_package(GTest "1.15.0" REQUIRED)                             # libgtest-dev
+find_package(GTest "1.15.0" REQUIRED CONFIG)                      # libgtest-dev
 find_package(Doxygen "1.9.8" OPTIONAL_COMPONENTS dot mscgen dia)  # doxygen
 
 enable_testing()

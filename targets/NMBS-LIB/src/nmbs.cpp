@@ -3,7 +3,9 @@
 //
 #include <nmbs/nmbs.h>
 
+#include <exiv2/exiv2.hpp>
 #include <chrono>
+#include <iostream>
 
 namespace nmbs
 {
@@ -47,5 +49,43 @@ namespace nmbs
         }
 
         return out;
+    }
+
+    std::string rdp(const std::string& payload)
+    {
+        std::string xml;
+        xml.reserve(payload.size() + 300);
+        xml.append("<rdf:RDF xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\" xmlns:mbxmp=\"urn:nato:stanag:4778:bindinginformation:1:0:xmp#\">");
+        xml.append("<rdf:Description rdf:about=\"\">");
+        xml.append("<mbxmp:bindingInformation>");
+        xml.append(payload);
+        xml.append("</mbxmp:bindingInformation>");
+        xml.append("</rdf:Description>");
+        xml.append("</rdf:RDF>");
+        return xml;
+    }
+
+    int write_xmp(const std::filesystem::path& path, const std::string& payload)
+    {
+        try
+        {
+            auto image = Exiv2::ImageFactory::open(path.string());
+            if (image.get() == nullptr) return 1;
+
+            image->readMetadata();
+            Exiv2::XmpData& xmpData = image->xmpData();
+            xmpData["bindingInformation"] = payload;
+            image->writeMetadata();
+        }
+        catch (const Exiv2::Error& e) {
+            std::cerr << "Exiv2 Exception: " << e.what() << "\n";
+            return 1;
+        }
+        catch (const std::exception& e) {
+            std::cerr << "Standard Exception: " << e.what() << "\n";
+            return 1;
+        }
+
+        return 0;
     }
 }

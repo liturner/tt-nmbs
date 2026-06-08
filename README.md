@@ -13,6 +13,9 @@ The project is aimed as a Debian Linux project only. The intention is to produce
 
 Dependencies are kept to a minimum. Particular focus is paid to ensuring Licenses are all very flexible, APT presence of packages, and trustworthiness. Ideally, this project will be developed on a Debian distro, with simple calls to install the libs via APT on a Developer Machine, and APT Dependencies in release.
 
+nmbs-lib - depends exiv2 (statically linked)
+nmbs-* - depends nmbs-lib
+
 ## Product
 
 - Exiv2 - C++ Lib for writing metadata to numerous formats, in particular images (dev: libexiv2-dev (static linking))
@@ -26,6 +29,9 @@ doxygen
 libboost-all-dev
 ninja-build
 
+## Recomended
+
+exiv2 (CLI tools for exiv2)
 
 ## External Resources
 

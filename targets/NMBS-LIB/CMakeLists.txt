@@ -1,4 +1,4 @@
-add_library(NMBS-LIB STATIC)
+add_library(NMBS-LIB SHARED)
 
 target_sources(NMBS-LIB
         PUBLIC
@@ -23,4 +23,9 @@ target_include_directories(NMBS-LIB
         "$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>"
         PRIVATE
         src
+)
+
+target_link_libraries(NMBS-LIB
+        PRIVATE
+        Exiv2::exiv2lib
 )

@@ -1,3 +1,7 @@
+# TODO: Move this to the testing target later
+configure_file(test.jpg test.jpg)
+configure_file(test2.jpg test2.jpg)
+
 add_executable(NMBS-CONFIDENTIALITY-LABEL)
 
 target_sources(NMBS-CONFIDENTIALITY-LABEL
@@ -34,6 +38,28 @@ set_target_properties(NMBS-CANONICALIZE PROPERTIES
 )
 
 target_link_libraries(NMBS-CANONICALIZE
+        PRIVATE
+        NMBS-LIB
+)
+
+##
+##
+##
+
+add_executable(NMBS-XMP)
+
+target_sources(NMBS-XMP
+        PRIVATE
+        src/nmbs-xmp.cpp
+)
+
+set_target_properties(NMBS-XMP PROPERTIES
+        VERSION ${PROJECT_VERSION}
+        SOVERSION ${PROJECT_VERSION_MAJOR}
+        OUTPUT_NAME nmbs-xmp
+)
+
+target_link_libraries(NMBS-XMP
         PRIVATE
         NMBS-LIB
 )
