@@ -1,0 +1,36 @@
+name: CI
+
+on: push
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: apt
+        run: sudo apt install libgtest-dev ninja-build doxygen libargparse-dev libexiv2-dev
+      - name: cmake configure debug
+        run: cmake --preset debug
+      - name: cmake --build debug code
+        run: cmake --build --preset debug --target NMBS-Tests
+      - name: cmake --build debug doxygen
+        run: cmake --build --preset debug --target doxygen
+      - name: cmake configure release
+        run: cmake --preset release
+      - name: cmake --build release code
+        run: cmake --build --preset release --target NMBS-Tests
+      - name: cmake --build release doxygen
+        run: cmake --build --preset release --target doxygen
+      - name: cpack
+        run: cpack -B build
+      - name: ctest debug
+        working-directory: build/debug
+        run: ctest
+      - name: ctest release
+        working-directory: build/release
+        run: ctest
+      - name: Archive production artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: tt-nmbs
+          path: build/TT-NMBS-*.tar.gz

@@ -27,7 +27,6 @@ nmbs-* - depends nmbs-lib
 build-essential
 libgtest-dev
 doxygen
-libboost-all-dev
 ninja-build
 
 ## Recomended

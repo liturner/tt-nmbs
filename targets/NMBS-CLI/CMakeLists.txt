@@ -1,5 +1,3 @@
-configure_file(test.jpg test.jpg COPYONLY)
-
 add_executable(NMBS-CONFIDENTIALITY-LABEL)
 
 target_sources(NMBS-CONFIDENTIALITY-LABEL
