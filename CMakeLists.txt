@@ -20,7 +20,7 @@ include(GoogleTest)
 include(GNUInstallDirs)
 include(CMakePackageConfigHelpers)
 
-find_package(exiv2 "0.28.5" REQUIRED CONFIG)                      # libexiv2-dev
+find_package(exiv2 REQUIRED CONFIG)                               # libexiv2-dev (Debian 13: 0.28.5, Ubuntu 24.04: 0.27.6)
 find_package(argparse "3.2.0" REQUIRED CONFIG)                    # libargparse-dev
 find_package(GTest "1.15.0" REQUIRED CONFIG)                      # libgtest-dev
 find_package(Doxygen "1.9.8" OPTIONAL_COMPONENTS dot mscgen dia)  # doxygen
