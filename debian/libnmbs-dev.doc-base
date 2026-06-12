@@ -1,0 +1,11 @@
+Document: libnmbs-dev
+Title: NMBS Library API Documentation
+Author: Luke Ian Turner
+Abstract: This manual provides the API reference and developer
+ documentation for the NMBS library, which handles security
+ labeling and automated network metadata standards.
+Section: Programming/C++
+
+Format: HTML
+Index: /usr/share/doc/libnmbs-dev/html/index.html
+Files: /usr/share/doc/libnmbs-dev/html/*.html

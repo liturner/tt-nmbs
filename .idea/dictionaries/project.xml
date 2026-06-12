@@ -6,6 +6,7 @@
       <w>confidentialitymetadatalabel</w>
       <w>debemail</w>
       <w>debfullname</w>
+      <w>dockerignore</w>
       <w>doxygen</w>
       <w>installxmlcatalogs</w>
       <w>libargparse</w>
@@ -14,6 +15,7 @@
       <w>libgtest</w>
       <w>libnmbs</w>
       <w>lintian</w>
+      <w>mainpage</w>
       <w>manpages</w>
       <w>mbxmp</w>
       <w>nmbs</w>

@@ -1,76 +1,16 @@
 add_subdirectory(NMBS-Library)
+add_subdirectory(NMBS-Get-XMP)
 add_subdirectory(NMBS-Set-XMP)
 add_subdirectory(NMBS-Tests)
 
 # Add this to force the cli executables to be available for GTest
-add_dependencies(NMBS-Tests NMBS-Set-XMP)
-
-#
-# Doxygen, man pages etc.
-#
-
-if (DOXYGEN_FOUND)
-    set(DOXYGEN_GENERATE_HTML YES)
-    set(DOXYGEN_GENERATE_MAN NO)
-    set(DOXYGEN_MACRO_EXPANSION YES)
-    set(DOXYGEN_EXCLUDE_SYMBOLS std::*)
-    doxygen_add_docs(doxygen ALL
-            NMBS-Library/include
-    )
-
-    #install(DIRECTORY
-    #        ${CMAKE_CURRENT_BINARY_DIR}/man/
-    #        TYPE MAN
-    #)
-endif ()
-
-# Generate the man1 page from the executables --help command.
-find_program(HELP2MAN_EXECUTABLE help2man)
-if(HELP2MAN_EXECUTABLE)
-    message(STATUS "Found help2man: ${HELP2MAN_EXECUTABLE}")
-
-    set(MAN_PAGE "${CMAKE_CURRENT_BINARY_DIR}/nmbs-set-xmp.1")
-
-    # 3. Create the rule to generate the man page
-    add_custom_command(
-            OUTPUT ${MAN_PAGE}
-            # help2man executes the target binary directly from the build directory
-            COMMAND ${HELP2MAN_EXECUTABLE}
-            --no-info
-            --no-discard-stderr
-            --name="Binds ADatP-4774 Confidentiality Labels to files supporting XMP"
-            --output=${MAN_PAGE}
-            $<TARGET_FILE:NMBS-Set-XMP>
-            DEPENDS NMBS-Set-XMP
-            COMMENT "Generating man page using help2man"
-            VERBATIM
-    )
-
-    # Tie the custom command to a target so it actually runs during 'make'.
-    add_custom_target(manpages ALL DEPENDS ${MAN_PAGE})
-
-    # 5. Install the generated man page to the standard location
-    install(FILES ${MAN_PAGE} DESTINATION ${CMAKE_INSTALL_MANDIR}/man1)
-else()
-    message(WARNING "help2man not found. Man pages will not be generated.")
-endif()
-
-#
-# Resources, Files etc.
-#
-
-install(FILES
-        NMBS-Library/resources/nl-cl.xsd
-        NMBS-Library/resources/nl-mb.xsd
-        NMBS-Library/resources/xmlspif.xsd
-        DESTINATION share/xml/schema/libnmbs
-)
+add_dependencies(NMBS-Tests NMBS-Set-XMP NMBS-Get-XMP)
 
 #
 # Targets and *Targets.cmake
 #
 
-install(TARGETS NMBS-Library NMBS-Set-XMP
+install(TARGETS NMBS-Library NMBS-Set-XMP NMBS-Get-XMP
         EXPORT ${PROJECT_NAME}Targets
         FILE_SET nmbs_headers
         LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}

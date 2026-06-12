@@ -61,12 +61,12 @@ namespace nmbs
         try
         {
             std::string payload = binding_information(serialise_confidentiality_label(
-                confidentiality_label.information.policy_identifier,
-                confidentiality_label.information.classification));
+                confidentiality_label.confidentiality_information.policy_identifier,
+                confidentiality_label.confidentiality_information.classification));
             const auto image = Exiv2::ImageFactory::open(path.string());
             if (image.get() == nullptr)
             {
-                throw file_not_found_exception();
+                throw exceptions::file_not_found_exception();
             }
             image->readMetadata();
             Exiv2::XmpData& xmp_data = image->xmpData();
@@ -80,5 +80,52 @@ namespace nmbs
         catch (const Exiv2::Error& e) {
             throw nmbs::exception(exit_code::unknown_error, "Exiv2::Error: " + std::string(e.what()));
         }
+    }
+
+    std::optional<std::string> read_xmp_xml(const std::filesystem::path& path)
+    {
+        try
+        {
+            Exiv2::XmpProperties::registerNs(std::string(s4778_xmp_namespace), std::string(s4778_xmp_prefix));
+            const auto image = Exiv2::ImageFactory::open(path.string());
+            if (image.get() == nullptr)
+            {
+                throw exceptions::file_not_found_exception();
+            }
+            image->readMetadata();
+
+            // This function must assume XMP is here. It is an exception if not. The user may be trying to read
+            // a file with no XMP support, so it is NOT a case for returning nullopt.
+            Exiv2::XmpData& xmp_data = image->xmpData();
+            if (xmp_data.empty())
+            {
+                throw exceptions::xmp_not_found_exception();
+            }
+
+            // Here we have XMP, but no label. Its valid to return nullopt
+            const Exiv2::XmpKey slab_key{std::string(s4778_xmp_prefix), std::string(s4778_key)};
+            const auto xmp_iter = xmp_data.findKey(slab_key);
+            if (xmp_iter == xmp_data.end())
+            {
+                return std::nullopt;
+            }
+
+            // TODO: Improve here. Probably validate that its sane XML or at least not empty?
+            const auto xmp_value = xmp_iter->getValue();
+            return xmp_value->toString();
+
+        }
+        catch (const Exiv2::Error& e) {
+            throw nmbs::exception(exit_code::unknown_error, "Exiv2::Error: " + std::string(e.what()));
+        }
+    }
+
+    std::vector<nmbs::confidentiality_label> read_xmp(const std::filesystem::path& path)
+    {
+        if (const auto label_xml{read_xmp_xml(path)}; label_xml.has_value())
+        {
+            return xml::from_xml(label_xml.value());
+        }
+        return {};
     }
 }

@@ -1,4 +1,5 @@
-configure_file(resources/test.jpg resources/test.jpg COPYONLY)
+configure_file(resources/test-has-label.jpg resources/test-has-label.jpg COPYONLY)
+configure_file(resources/test-no-xmp.jpg resources/test-no-xmp.jpg COPYONLY)
 
 add_executable(NMBS-Tests
         src/nmbs/Basic.tests.cpp

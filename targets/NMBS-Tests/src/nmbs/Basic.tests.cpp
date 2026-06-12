@@ -11,3 +11,12 @@ TEST(XML, Namespaces) {
     ASSERT_EQ(nmbs::s4774_namespace, "urn:nato:stanag:4774:confidentialitymetadatalabel:1:0");
 
 }
+
+TEST(XMP, Read)
+{
+    const auto labels = nmbs::read_xmp("targets/NMBS-Tests/resources/test-has-label.jpg");
+    ASSERT_EQ(labels.size(), 1);
+    ASSERT_EQ(labels[0].label_type, nmbs::confidentiality_label::originator);
+    ASSERT_EQ(labels[0].confidentiality_information.policy_identifier, "PUBLIC");
+    ASSERT_EQ(labels[0].confidentiality_information.classification, "UNMARKED");
+}

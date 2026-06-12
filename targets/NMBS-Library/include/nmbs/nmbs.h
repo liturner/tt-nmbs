@@ -1,3 +1,5 @@
+#pragma once
+
 /// @file nmbs.h
 /// @brief The intended "include all" header file for libnmbs
 /// @details This file will include all the available nmbs namespace. Use it as
@@ -24,8 +26,6 @@
 /// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 /// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 /// SOFTWARE.
-
-#pragma once
 
 #include "confidentiality_label.h"
 #include "exceptions.h"
@@ -152,5 +152,9 @@ namespace nmbs
     /// @return The label written to the file.
     /// @throws nmbs::file_not_found_exception
     std::string write_xmp(const std::filesystem::path& path, const confidentiality_label& confidentiality_label);
+
+    [[nodiscard]] std::vector<confidentiality_label> read_xmp(const std::filesystem::path& path);
+
+    [[nodiscard]] std::optional<std::string> read_xmp_xml(const std::filesystem::path& path);
 
 }

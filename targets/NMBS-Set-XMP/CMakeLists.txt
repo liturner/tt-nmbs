@@ -13,3 +13,5 @@ target_link_libraries(NMBS-Set-XMP
         PRIVATE
         NMBS-Library
 )
+
+generate_manpage(NMBS-Set-XMP "Binds ADatP-4774 Confidentiality Labels to files supporting XMP")

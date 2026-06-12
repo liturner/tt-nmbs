@@ -1,0 +1,17 @@
+build
+cmake_test_discovery_*
+
+# ==========================================
+# Debian Packaging Garbage
+# ==========================================
+obj-*-linux-gnu*/
+debian/.debhelper/
+debian/nmbs/
+debian/libnmbs1/
+debian/libnmbs-dev/
+debian/tmp/
+debian/debhelper-build-stamp
+debian/files
+debian/substvars
+debian/*.substvars
+debian/*.log

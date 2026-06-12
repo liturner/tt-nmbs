@@ -36,11 +36,14 @@ stable. This is done as follows (assuming current dir is the project root).
 ```shell
 # Use the gpg fingerprint for the -k field. e.g.
 dpkg-buildpackage -kB6B00085FA5CADF5EA06188D11846BA6C8BEAD9A
-lintian ../tt-nmbs_1.0_all.deb
+lintian ../tt-nmbs*.changes
 
 # To update the changelog use dch. In particular, the commands --append, --increment, --edit, --release and --newversion
 # Note that debhelper decides e.g. if to sign the build based on the status in the changelog. Its an important file!!!
 dch -m
+
+# Finalise the current version in the log
+dch -mr --distribution trixie
 
 # To tidy up after, use
 dh clean
@@ -64,19 +67,22 @@ Dependencies are kept to a minimum. Particular focus is paid to ensuring License
 packages, and trustworthiness. Ideally, this project will be developed on a Debian distro, with simple calls to install
 the libs via APT on a Developer Machine, and APT Dependencies in release.
 
-| Name     | Type       | APT             | Description                                                            |
-|----------|------------|-----------------|------------------------------------------------------------------------|
-| Exiv2    | Product    | libexiv2-dev    | C++ Lib for writing metadata to numerous formats, in particular images |
-| argparse | Product    | libargparse-dev | C++17 Headers for parsing CLI options                                  |
-|          | Build      | build-essential |                                                                        |
-|          | Build      | libgtest-dev    |                                                                        |
-|          | Build      | doxygen         |                                                                        |
-|          | Build      | ninja-build     |                                                                        |
-|          | Build      | help2man        |                                                                        |
-|          | Build      | debhelper       | Toolset for building .deb files                                        |
-|          | Build      | lintian         | Tool for verifying quality of .deb packages                            |
-|          | Build      | devscripts      | Scripts containing dch used for the debian changelog                   |
-|          | Recomended | exiv2           | CLI tools for Exiv2. Usefull for debugging                             |
+| Name     | Type         | APT             | Description                                                            |
+|----------|--------------|-----------------|------------------------------------------------------------------------|
+| Exiv2    | Product      | libexiv2-dev    | C++ Lib for writing metadata to numerous formats, in particular images |
+| argparse | Product      | libargparse-dev | C++17 Headers for parsing CLI options                                  |
+|          | Product      | libxml2         | C XML library. Most "native" and maintained lib possible in Debian     |
+|          | Build        | libxml2-dev     |                                                                        |
+|          | Build        | build-essential |                                                                        |
+|          | Build        | libgtest-dev    |                                                                        |
+|          | Build        | doxygen         |                                                                        |
+|          | Build        | ninja-build     |                                                                        |
+|          | Build        | help2man        |                                                                        |
+|          | Build        | debhelper       | Toolset for building .deb files                                        |
+|          | Development  | lintian         | Tool for verifying quality of .deb packages                            |
+|          | Development  | devscripts      | Scripts containing dch used for the debian changelog                   |
+|          | Development  | libxml2-doc     |                                                                        |
+|          | Recomended   | exiv2           | CLI tools for Exiv2. Usefull for debugging                             |
 
 ## External Resources
 

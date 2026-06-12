@@ -3,7 +3,7 @@ Section: utils
 Priority: optional
 Maintainer: Luke Ian Turner <turnertech@outlook.de>
 Standards-Version: 4.6.0
-Build-Depends: debhelper-compat (= 13), libexiv2-dev, libargparse-dev, build-essential, libgtest-dev, doxygen, help2man
+Build-Depends: debhelper-compat (= 13), libexiv2-dev, libargparse-dev, libxml2-dev (>= 2.12.7), libgtest-dev, doxygen, help2man
 
 # --- Package 1: The CLI Tool ---
 Package: nmbs
@@ -18,7 +18,7 @@ Description: TurnerTech - NATO Metadata Binding Service
 Package: libnmbs1
 Section: libs
 Architecture: amd64
-Depends: ${shlibs:Depends}, ${misc:Depends}
+Depends: ${shlibs:Depends}, ${misc:Depends}, libxml2 (>= 2.12.7)
 Description: Runtime shared library for nmbs
  This package contains the runtime shared library target (libnmbs.so.*).
  It is required by the CLI tool and other applications to execute.

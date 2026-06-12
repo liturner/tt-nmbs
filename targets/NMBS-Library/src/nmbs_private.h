@@ -56,4 +56,9 @@ namespace nmbs
     ///         BindingInformation element.
     [[nodiscard]] std::string binding_information(std::string_view confidentiality_label);
 
+    namespace xml
+    {
+        [[nodiscard]] std::vector<confidentiality_label> from_xml(const std::string& xml);
+    }
+
 }

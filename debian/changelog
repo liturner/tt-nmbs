@@ -1,10 +1,12 @@
-tt-nmbs (1.0.0~1) UNRELEASED; urgency=low
+tt-nmbs (1.0.0~alpha1) trixie; urgency=low
 
   * Initial version
   * Add libnmbs1 shared library and package
   * Add libnmbs-dev package
   * Add nmbs package
   * Add nmbs-set-xmp command to nmbs package
-  * Add man pages for nmbs-set-xmp
+  * Add nmbs-get-xmp command to nmbs package
+  * Add man pages
+  * Add html pages and doc-base support
 
- -- Luke Ian Turner <turnertech@outlook.de>  Thu, 11 Jun 2026 16:05:35 +0200
+ -- Luke Ian Turner <turnertech@outlook.de>  Wed, 17 Jun 2026 10:03:10 +0200

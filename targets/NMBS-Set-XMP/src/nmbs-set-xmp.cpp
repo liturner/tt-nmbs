@@ -26,10 +26,10 @@ int main(const int argc, char* argv[]) {
     }
 
     // Argument Validation
-    nmbs::originator_confidentiality_label label;
+    nmbs::confidentiality_label label;
     const std::filesystem::path file = program.get<std::string>("file");
-    label.information.policy_identifier = program.get<std::string>("policy");
-    label.information.classification = program.get<std::string>("classification");
+    label.confidentiality_information.policy_identifier = program.get<std::string>("policy");
+    label.confidentiality_information.classification = program.get<std::string>("classification");
 
     if (!(std::filesystem::exists(file) && std::filesystem::is_regular_file(file))) {
         std::cerr << "file not found" << std::endl;

@@ -1,3 +1,5 @@
+#pragma once
+
 /// @file exceptions.h
 /// @brief nmbs specific exceptions
 ///
@@ -23,54 +25,73 @@
 /// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 /// SOFTWARE.
 
-#pragma once
-
-#include "exit_code.h"
-#include <exception>
+#include "exception.h"
 #include <string>
 #include <utility>
 
-namespace nmbs {
-
+///
+/// nmbs::exception specialisations.
+namespace nmbs::exceptions
+{
     ///
-    /// @brief generic base exception for the nmbs namespace
-    class exception : public std::exception {
+    /// @brief "File not found" exception including sensible defaults for the message.
+    class file_not_found_exception : public exception
+    {
     public:
-
-        /// generic base exception for the nmbs namespace
-        /// @param code the nmbs::exit_code related to this error
-        /// @param message a message which may be presented to the end user
-        /// @see nmbs::exit_code
-        exception(const int code, std::string message)
-            : code_(code), message_(std::move(message)) {}
-
-        ///
-        /// virtual destructor ensuring proper cleanup for derived classes
-        ~exception() noexcept override = default;
-
-        ///
-        /// overriding standard what() to return our custom string message
-        [[nodiscard]] const char* what() const noexcept override {
-            return message_.c_str();
+        /// Constructor
+        /// @param message message
+        explicit file_not_found_exception(std::string message = "Requested resource could not be found")
+            : exception(exit_code::file_not_found, std::move(message))
+        {
         }
-
-        ///
-        /// getter for the custom integer error code
-        [[nodiscard]] int code() const noexcept {
-            return code_;
-        }
-
-    private:
-        int code_;
-        std::string message_;
     };
 
     ///
-    /// "File not found" exception including sensible defaults for the message.
-    class file_not_found_exception : public exception {
+    /// "Xmp not found" exception including sensible defaults for the message.
+    class xmp_not_found_exception : public exception
+    {
     public:
-        explicit file_not_found_exception(std::string message = "Requested resource could not be found.")
-            : exception(exit_code::file_not_found, std::move(message)) {}
+        explicit xmp_not_found_exception(
+            std::string message = "Requested resource did not contain any XMP data (at all)")
+            : exception(exit_code::xmp_not_found, std::move(message))
+        {
+        }
     };
 
+    ///
+    /// "Xmp not found" exception including sensible defaults for the message.
+    class xmp_key_not_found_exception : public exception
+    {
+    public:
+        explicit xmp_key_not_found_exception(
+            std::string key,
+            std::string message = "Requested resource did not contain the desired XMP key ")
+            : exception(exit_code::xmp_key_not_found, std::move(message) + std::move(key))
+        {
+        }
+    };
+
+    ///
+    /// XML Parser could not read an XML in.
+    class xml_could_not_parse_exception : public exception
+    {
+    public:
+        explicit xml_could_not_parse_exception(
+            std::string message = "Requested XML could not be read")
+            : exception(exit_code::xml_could_not_parse, std::move(message))
+        {
+        }
+    };
+
+    ///
+    /// XML Parser could not read an XML in.
+    class xml_could_not_create_xpath_context_exception : public exception
+    {
+    public:
+        explicit xml_could_not_create_xpath_context_exception(
+            std::string message = "Requested XML could not be read")
+            : exception(exit_code::xml_could_not_create_xpath_context, std::move(message))
+        {
+        }
+    };
 }

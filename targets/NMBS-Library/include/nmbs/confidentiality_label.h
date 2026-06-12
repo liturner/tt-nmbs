@@ -1,3 +1,5 @@
+#pragma once
+
 /// @file confidentiality_label.h
 /// @brief Object representation of a Confidentiality Label as per ADatP-4774
 ///
@@ -23,7 +25,6 @@
 /// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 /// SOFTWARE.
 
-#pragma once
 #include <chrono>
 #include <string>
 
@@ -31,7 +32,7 @@ namespace nmbs
 {
     ///
     /// @brief <s4774::ConfidentialityInformation>
-    struct confidentiality_information
+    struct confidentiality_information_type
     {
         ///
         /// @brief <s4774::PolicyIdentifier>
@@ -40,6 +41,14 @@ namespace nmbs
         ///
         /// @brief <s4774::Classification>
         std::string classification;
+
+        ///
+        /// @brief <s4774::PrivacyMark>
+        std::optional<std::string> privacy_mark;
+
+        ///
+        /// @brief <s4774::Category>
+        // TODO: List of other structs. category;
     };
 
     ///
@@ -49,26 +58,26 @@ namespace nmbs
     {
         enum confidentiality_label_type
         {
+            ///
+            /// @brief <s4774::originatorConfidentialityLabel>
             originator,
             alternative,
-            successor
+            metadata
         };
+
+        explicit confidentiality_label(const confidentiality_label_type label_type = originator) : label_type(label_type) {}
+
+        ///
+        /// @brief Field to save having to implement the type inheritance here
+        confidentiality_label_type label_type;
 
         ///
         /// @brief <s4774::ConfidentialityInformation>
-        confidentiality_information information;
-        virtual confidentiality_label_type label_type() = 0;
-        virtual ~confidentiality_label() = default;
-    };
+        confidentiality_information_type confidentiality_information;
 
-    ///
-    /// @brief <s4774::originatorConfidentialityLabel>
-    struct originator_confidentiality_label : confidentiality_label
-    {
         ///
         /// @brief <s4774::CreationDateTime>
         std::chrono::time_point<std::chrono::utc_clock, std::chrono::seconds> creation_date_time;
-        confidentiality_label_type label_type() override {return originator;};
     };
 
 }

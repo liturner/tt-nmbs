@@ -1,3 +1,5 @@
+#pragma once
+
 /// @file exit_code.h
 /// @brief Basic enum containing a list of integer exit codes which the application may use
 ///
@@ -23,8 +25,6 @@
 /// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 /// SOFTWARE.
 
-#pragma once
-
 namespace nmbs
 {
     /// The possible exit codes which any of the nmbs tools may produce. These may be used in library functions, and as
@@ -42,7 +42,29 @@ namespace nmbs
         ///
         /// The specified file could not be found.
         file_not_found = 10,
-        security_error = 11,
+
+        ///
+        /// There was no XMP packet attached to a file.
+        xmp_not_found = 11,
+
+        ///
+        /// Although the file contained XMP, the desired key was not found.
+        xmp_key_not_found = 12,
+
+        ///
+        /// The XML parser was unable to read the provided XML.
+        xml_could_not_parse = 13,
+
+        ///
+        /// The XML parser was unable to read create an XPath context.
+        xml_could_not_create_xpath_context = 14,
+
+        ///
+        /// There was no label attached to the file.
+        no_label_present = 15,
+
+        ///
+        /// An unspecified error occurred.
         unknown_error = 99
     };
 }

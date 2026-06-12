@@ -1,0 +1,4 @@
+TODO: Improve doxygen to include mindestens the public API
+
+v1.1
+TODO: Write XMP should have a vector<confidentiality_label> override
