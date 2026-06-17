@@ -15,3 +15,7 @@ target_link_libraries(NMBS-Set-XMP
 )
 
 generate_manpage(NMBS-Set-XMP "Binds ADatP-4774 Confidentiality Labels to files supporting XMP")
+
+install(TARGETS NMBS-Set-XMP
+        RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+)

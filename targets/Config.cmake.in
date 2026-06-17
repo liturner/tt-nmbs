@@ -3,4 +3,3 @@
 include("${CMAKE_CURRENT_LIST_DIR}/${PROJECT_NAME}Targets.cmake")
 
 check_required_components(NMBS-Library)
-check_required_components(NMBS-Set-XMP)

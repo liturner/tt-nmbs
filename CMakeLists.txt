@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.23)
 project(
         TT-NMBS
-        LANGUAGES CXX
+        LANGUAGES C CXX
         VERSION 1.0.0
 )
 
@@ -27,6 +27,10 @@ find_package(argparse "3.0.0...3.2.0" REQUIRED CONFIG)            # libargparse-
 find_package(GTest "1.14.0...1.17.0" REQUIRED CONFIG)             # libgtest-dev (Ubuntu 24.04: 1.14.0 Debian 13: 1.15.0 Debian 14: 1.17.0)
 find_package(Doxygen "1.9.8" OPTIONAL_COMPONENTS dot mscgen dia)  # doxygen
 find_package(LibXml2 "2.9.14" REQUIRED)                           # libxml2-dev
+find_package(PkgConfig REQUIRED)                                  # pkg-config
+
+pkg_check_modules(GLIB REQUIRED glib-2.0)                         # libglib2.0-dev
+pkg_check_modules(NAUTILUS REQUIRED libnautilus-extension-4)      # libnautilus-extension-dev
 
 enable_testing()
 

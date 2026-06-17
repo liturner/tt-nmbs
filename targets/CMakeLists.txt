@@ -1,16 +1,17 @@
 add_subdirectory(NMBS-Library)
 add_subdirectory(NMBS-Get-XMP)
 add_subdirectory(NMBS-Set-XMP)
+add_subdirectory(NMBS-Nautilus)
 add_subdirectory(NMBS-Tests)
 
 # Add this to force the cli executables to be available for GTest
 add_dependencies(NMBS-Tests NMBS-Set-XMP NMBS-Get-XMP)
 
 #
-# Targets and *Targets.cmake
+# *Targets.cmake and *Config.cmake
 #
 
-install(TARGETS NMBS-Library NMBS-Set-XMP NMBS-Get-XMP
+install(TARGETS NMBS-Library
         EXPORT ${PROJECT_NAME}Targets
         FILE_SET nmbs_headers
         LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
@@ -24,10 +25,6 @@ install(EXPORT ${PROJECT_NAME}Targets
         NAMESPACE ${PROJECT_NAME}::
         DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}
 )
-
-#
-# *Config*.cmake
-#
 
 configure_package_config_file(${CMAKE_CURRENT_SOURCE_DIR}/Config.cmake.in
         "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Config.cmake"

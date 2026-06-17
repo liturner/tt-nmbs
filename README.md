@@ -70,22 +70,28 @@ Dependencies are kept to a minimum. Particular focus is paid to ensuring License
 packages, and trustworthiness. Ideally, this project will be developed on a Debian distro, with simple calls to install
 the libs via APT on a Developer Machine, and APT Dependencies in release.
 
-| Name     | Type         | APT             | Description                                                            |
-|----------|--------------|-----------------|------------------------------------------------------------------------|
-| Exiv2    | Product      | libexiv2-dev    | C++ Lib for writing metadata to numerous formats, in particular images |
-| argparse | Product      | libargparse-dev | C++17 Headers for parsing CLI options                                  |
-|          | Product      | libxml2         | C XML library. Most "native" and maintained lib possible in Debian     |
-|          | Build        | libxml2-dev     |                                                                        |
-|          | Build        | build-essential |                                                                        |
-|          | Build        | libgtest-dev    |                                                                        |
-|          | Build        | doxygen         |                                                                        |
-|          | Build        | ninja-build     |                                                                        |
-|          | Build        | help2man        |                                                                        |
-|          | Build        | debhelper       | Toolset for building .deb files                                        |
-|          | Development  | lintian         | Tool for verifying quality of .deb packages                            |
-|          | Development  | devscripts      | Scripts containing dch used for the debian changelog                   |
-|          | Development  | libxml2-doc     |                                                                        |
-|          | Recomended   | exiv2           | CLI tools for Exiv2. Usefull for debugging                             |
+| Name     | Type        | APT                       | Description                                                            |
+|----------|-------------|---------------------------|------------------------------------------------------------------------|
+| Exiv2    | Product     | libexiv2-dev              | C++ Lib for writing metadata to numerous formats, in particular images |
+| argparse | Product     | libargparse-dev           | C++17 Headers for parsing CLI options                                  |
+|          | Product     | libxml2                   | C XML library. Most "native" and maintained lib possible in Debian     |
+|          | Build       | libxml2-dev               |                                                                        |
+|          | Build       | build-essential           |                                                                        |
+|          | Build       | cmake                     |                                                                        |
+|          | Build       | libgtest-dev              |                                                                        |
+|          | Build       | doxygen                   |                                                                        |
+|          | Build       | ninja-build               |                                                                        |
+|          | Build       | help2man                  |                                                                        |
+|          | Build       | debhelper                 | Toolset for building .deb files                                        |
+|          | Build       | pkg-config                | NMBS-Nautilus Toolset for building GNOME projects                      |
+|          | Product     | libglib2.0-dev            | NMBS-Nautilus                                                          |
+|          | Product     | libnautilus-extension-dev | NMBS-Nautilus                                                          |
+|          | Development | lintian                   | Tool for verifying quality of .deb packages                            |
+|          | Development | devscripts                | Scripts containing dch used for the debian changelog                   |
+|          | Development | libxml2-doc               |                                                                        |
+|          | Development | valgrind                  | Runs in CLion directly to check memory leaks                           |
+|          | Development | git                       |                                                                        |
+|          | Recomended  | exiv2                     | CLI tools for Exiv2. Usefull for debugging                             |
 
 ## External Resources
 

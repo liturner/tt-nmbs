@@ -1,4 +1,26 @@
-TODO: Improve doxygen to include mindestens the public API
+v1.0.0~alpha3
+TODO: Add sidecar files
 
-v1.1
-TODO: Write XMP should have a vector<confidentiality_label> override
+v1.0.0~alpha4
+TODO: Add SPIF support
+TODO: Add data driven right click context menu
+
+api
+
+c -> cpp public -> cpp_private
+
+- list policies
+- list classifications (policy&)
+
+------ Group these into one struct return with some flags logic?
+- identify binding mechanism used (path)
+- identify binding mechanism supported (path)
+- identify binding mechanism best (path)
+------
+- sidecar exists (path)
+- xmp exists (path)
+- label exists (path)
+
+- write sidecar // fallback labelling
+- write_labels // should auto identify binding
+- get_labels

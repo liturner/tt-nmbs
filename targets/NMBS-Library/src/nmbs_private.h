@@ -26,10 +26,45 @@
 #pragma once
 
 #include "nmbs/nmbs.h"
+#include "binding.h"
 #include <string>
 
 namespace nmbs
 {
+    /// @brief Writes ADatP‑4778 binding information into an image's XMP metadata.
+    /// @brief Embeds the provided payload into the XMP metadata of the specified image
+    /// using the standardized ADatP‑4778 XMP property key. This overload of the
+    /// function is a convenience overload. In a future version a more complete
+    /// function will be provided taking in a vector of labels to write.
+    /// @param path     Path to the image file to modify.
+    /// @param confidentiality_label  A standards‑compliant ADatP‑4778 BindingInformation element.
+    /// @return The label written to the file.
+    /// @throws nmbs::file_not_found_exception failed to locate the provided path
+    std::string write_xmp(const std::filesystem::path& path, const confidentiality_label& confidentiality_label);
+
+    /// @brief Reads the ADatP-4774 labels from the XMP of a file
+    /// @details and returns them in a deserialised form. The deserialization
+    /// is quite tolerant, and will favour returning incomplete data, rather
+    /// than erroring out. This design choice is to ensure interoperability
+    /// with other less strict implementations.
+    /// @param path to the file
+    /// @return a collection of all labels applied to the file
+    /// @throws nmbs::exceptions::file_not_found_exception failed to locate the provided path
+    /// @throws nmbs::exception for all unexpected errors
+    /// @see nmbs::write_xmp
+    /// @see nmbs::read_xmp_xml
+    [[nodiscard]] std::vector<confidentiality_label> read_xmp(const std::filesystem::path& path);
+
+    /// @brief Reads the ADatP-4774 labels from the XMP of a file
+    /// @details and returns them in their raw XML form
+    /// @param path to the file
+    /// @return the raw XML of the stored labels
+    /// @throws nmbs::exceptions::file_not_found_exception failed to locate the provided path
+    /// @throws nmbs::exception for all unexpected errors
+    /// @see nmbs::write_xmp
+    /// @see nmbs::read_xmp
+    [[nodiscard]] std::optional<std::string> read_xmp_xml(const std::filesystem::path& path);
+
     /// @brief Generates a basic ADatP‑4774 confidentiality label.
     ///
     /// Constructs a minimal confidentiality label using the provided policy
@@ -37,10 +72,9 @@ namespace nmbs
     /// ADatP‑4774 label suitable for embedding in metadata structures or
     /// BindingInformation elements.
     ///
-    /// @param policy_identifier  The policy identifier to include in the label.
-    /// @param classification     The classification value defined by the policy.
+    /// @param confidentiality_label  The label to serialise.
     /// @return An XML string representing a basic ADatP‑4774 confidentiality label.
-    [[nodiscard]] std::string serialise_confidentiality_label(std::string_view policy_identifier, std::string_view classification);
+    [[nodiscard]] std::string serialise_confidentiality_label(const confidentiality_label& confidentiality_label);
 
     /// @brief Wraps a confidentiality label in an ADatP‑4778 BindingInformation element.
     ///

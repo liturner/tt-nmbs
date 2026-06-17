@@ -28,14 +28,142 @@
 #include <iostream>
 #include <sstream>
 #include <chrono>
+#include <cstring>
 #include <string>
 #include <libxml/parser.h>
 #include <libxml/tree.h>
 #include <libxml/xpath.h>
 #include <libxml/xpathInternals.h>
 
-#include "nmbs/confidentiality_label.h"
-#include "nmbs/nmbs.h"
+#include "nmbs_private.h"
+#include "nmbs/c/nmbs.h"
+
+nmbs_confidentiality_labels nmbs_read_labels(const char* file) noexcept
+{
+    nmbs_confidentiality_labels return_labels;
+    return_labels.size = 0;
+    return_labels.label = nullptr;
+
+    try
+    {
+        const auto labels = nmbs::read_xmp(std::filesystem::path(std::string(file)));
+        if (labels.empty())
+        {
+            return return_labels;
+        }
+
+        return_labels.label = static_cast<nmbs_confidentiality_label*>(std::malloc(labels.size() * sizeof(nmbs_confidentiality_label)));
+        if (!return_labels.label)
+        {
+            nmbs_free_confidentiality_labels(&return_labels);
+            return return_labels;
+        }
+
+        for (int i = 0; i < labels.size(); ++i)
+        {
+            return_labels.label[i].policy_identifier = strdup(labels[i].confidentiality_information.policy_identifier.c_str());
+            return_labels.label[i].classification = strdup(labels[i].confidentiality_information.classification.c_str());
+            ++return_labels.size;
+        }
+        return return_labels;
+    }
+    catch (const std::exception& e) {
+        // Log the error inside C++ so you know what went wrong
+        std::cerr << "C++ Exception caught in nmbs_read_xmp: " << e.what() << std::endl;
+        return return_labels;
+    }
+    catch (...)
+    {
+        std::cerr << "C++ Exception caught in nmbs_read_xmp" << std::endl;
+        return return_labels;
+    }
+}
+
+int nmbs_write_labels(const char* file, const nmbs_confidentiality_labels* labels) noexcept
+{
+    try
+    {
+        std::vector<nmbs::confidentiality_label> cpp_labels(labels->size);
+        cpp_labels.resize(labels->size);
+        for (int i = 0; i < labels->size; ++i)
+        {
+            cpp_labels[i].label_type = nmbs::confidentiality_label::originator;
+            cpp_labels[i].confidentiality_information.policy_identifier = labels->label[i].policy_identifier;
+            cpp_labels[i].confidentiality_information.classification = labels->label[i].classification;
+        }
+
+        nmbs::write_xmp(std::filesystem::path(std::string(file)), cpp_labels[0]);
+        return nmbs::success;
+    }
+    catch (const nmbs::exception& e) {
+        std::cerr << "C++ Exception caught in nmbs_write_xmp: " << e.what() << std::endl;
+        return e.code();
+    }
+    catch (const std::exception& e) {
+        std::cerr << "C++ Exception caught in nmbs_write_xmp: " << e.what() << std::endl;
+        return nmbs::unknown_error;
+    }
+    catch (...)
+    {
+        std::cerr << "C++ Exception caught in nmbs_write_xmp" << std::endl;
+        return nmbs::unknown_error;
+    }
+}
+
+[[nodiscard]] uint32_t nmbs_binding_support(const char* file) noexcept
+{
+    if (!file) {
+        return 0;
+    }
+    try
+    {
+        const std::filesystem::path target_path(file);
+        nmbs::binding::flags cpp_flags = nmbs::binding::support(target_path);
+        return static_cast<uint32_t>(cpp_flags);
+    }
+    catch (const std::exception& e) {
+        std::cerr << "C++ Exception caught in nmbs_binding_support: " << e.what() << std::endl;
+        return 0;
+    }
+    catch (...)
+    {
+        std::cerr << "C++ Exception caught in nmbs_binding_support" << std::endl;
+        return 0;
+    }
+}
+
+void nmbs_free_confidentiality_label(nmbs_confidentiality_label* label) noexcept
+{
+    try
+    {
+        std::free(const_cast<char*>(label->policy_identifier));
+        label->policy_identifier = nullptr;
+        std::free(const_cast<char*>(label->classification));
+        label->classification = nullptr;
+    }
+    catch (...)
+    {
+        std::cerr << "C++ Exception caught in during nmbs_free. High chance of memory leaks!" << std::endl;
+    }
+}
+
+void nmbs_free_confidentiality_labels(nmbs_confidentiality_labels* labels) noexcept
+{
+    try
+    {
+        for (int i = 0; i < labels->size; ++i)
+        {
+            nmbs_free_confidentiality_label(&labels->label[i]);
+        }
+        std::free(labels->label);
+        labels->label = nullptr;
+        labels->size = 0;
+    }
+    catch (...)
+    {
+        std::cerr << "C++ Exception caught in during nmbs_free. High chance of memory leaks!" << std::endl;
+    }
+}
 
 namespace nmbs::xml
 {
@@ -92,10 +220,10 @@ namespace nmbs::xml
         // Here we go to string as the string_view handles null termination differently. The tiny overhead is not a
         // concern!
         // ReSharper disable CppVariableCanBeMadeConstexpr
-        const std::string s4778_prefix(nmbs::s4778_prefix);
-        const std::string s4778_namespace(nmbs::s4778_namespace);
-        const std::string s4774_prefix(nmbs::s4774_prefix);
-        const std::string s4774_namespace(nmbs::s4774_namespace);
+        const std::string s4778_prefix(nmbs::constants::s4778_prefix);
+        const std::string s4778_namespace(nmbs::constants::s4778_namespace);
+        const std::string s4774_prefix(nmbs::constants::s4774_prefix);
+        const std::string s4774_namespace(nmbs::constants::s4774_namespace);
         // ReSharper restore CppVariableCanBeMadeConstexpr
 
         xmlXPathRegisterNs(xpath_ctx.get(), reinterpret_cast<const xmlChar*>(s4778_prefix.c_str()), reinterpret_cast<const xmlChar*>(s4778_namespace.c_str()));
@@ -126,7 +254,7 @@ namespace nmbs::xml
                 } else if (current_node_name == "alternativeConfidentialityLabel") {
                     current_label.label_type = confidentiality_label::alternative;
                 } else if (current_node_name == "metadataConfidentialityLabel") {
-                    current_label.label_type = confidentiality_label::metadata;
+                    current_label.label_type = confidentiality_label::successor;
                 } else {
                     // TODO: Possibly cerr a warning here? At this point it is wierd if there is anything other than the three cases, but I dont think its worth killing the function? Consider in depth.
                     continue;

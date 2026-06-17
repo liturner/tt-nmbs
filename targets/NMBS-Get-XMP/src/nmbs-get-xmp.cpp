@@ -34,7 +34,7 @@ int main(const int argc, char* argv[]) {
     try
     {
         if (program["--raw"] == true) {
-            if (const auto raw_xml = nmbs::read_xmp_xml(file); raw_xml.has_value())
+            if (const auto raw_xml = nmbs::read_labels_xml(file); raw_xml.has_value())
             {
                 std::cout << raw_xml.value() << std::endl;
                 return nmbs::exit_code::success;
@@ -43,7 +43,7 @@ int main(const int argc, char* argv[]) {
             return nmbs::exit_code::no_label_present;
         } else
         {
-            for (const auto confidentiality_labels = nmbs::read_xmp(file); const auto& label : confidentiality_labels)
+            for (const auto confidentiality_labels = nmbs::read_labels(file); const auto& label : confidentiality_labels)
             {
                 std::cout << label.confidentiality_information.policy_identifier << " " << label.confidentiality_information.classification << std::endl;
                 return nmbs::exit_code::success;

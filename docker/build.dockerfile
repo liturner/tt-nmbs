@@ -2,7 +2,7 @@ ARG DEBIAN_RELEASE=forky
 FROM debian:${DEBIAN_RELEASE} AS nmbs-build
 
 RUN apt-get update && apt-get install --no-install-recommends --yes \
-    build-essential cmake debhelper help2man libgtest-dev doxygen libargparse-dev libexiv2-dev libxml2-dev
+    build-essential cmake debhelper help2man libgtest-dev doxygen libargparse-dev libexiv2-dev libxml2-dev pkg-config libglib2.0-dev libnautilus-extension-dev
 
 WORKDIR /usr/src/nmbs/src
 COPY . .

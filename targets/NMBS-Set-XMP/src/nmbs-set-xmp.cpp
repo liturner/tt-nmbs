@@ -39,9 +39,11 @@ int main(const int argc, char* argv[]) {
     // Program Logic
     try
     {
-        const std::string output = nmbs::write_xmp(file, label);
+        std::vector<nmbs::confidentiality_label> xmp(1);
+        xmp.push_back(label);
+        const std::string output = nmbs::write_labels(file,  xmp);
         if (program["--verbose"] == true) {
-            std::cout << "  Key: Xmp." << nmbs::s4778_xmp_prefix << "." << nmbs::s4778_key << std::endl
+            std::cout << "  Key: Xmp." << nmbs::constants::s4778_xmp_prefix << "." << nmbs::constants::s4778_key << std::endl
             << "Value: " << output << std::endl;
         }
     }

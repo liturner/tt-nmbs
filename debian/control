@@ -19,6 +19,7 @@ Package: libnmbs1
 Section: libs
 Architecture: amd64
 Depends: ${shlibs:Depends}, ${misc:Depends}, libxml2 (>= 2.12.7)
+Recommends: dochelp
 Description: Runtime shared library for nmbs
  This package contains the runtime shared library target (libnmbs.so.*).
  It is required by the CLI tool and other applications to execute.
