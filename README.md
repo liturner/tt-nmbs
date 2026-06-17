@@ -45,6 +45,9 @@ dch -m
 # Finalise the current version in the log
 dch -mr --distribution trixie
 
+# After finalisation, increment the build version automatically and start the next section
+dch -mi
+
 # To tidy up after, use
 dh clean
 ```
