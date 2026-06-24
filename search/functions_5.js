@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['what_0',['what',['../classnmbs_1_1exception.html#a881db5ff7c2964cc0b2704c161100460',1,'nmbs::exception']]],
-  ['write_5fxmp_1',['write_xmp',['../namespacenmbs.html#acf645b0b25b99c50f6382855d5776a44',1,'nmbs']]]
+  ['operator_3d_0',['operator=',['../structnmbs_1_1confidentiality__label.html#a7bc07da337ca5f654b64358284f7daa4',1,'nmbs::confidentiality_label']]]
 ];

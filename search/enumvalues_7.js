@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['unknown_5ferror_0',['unknown_error',['../namespacenmbs.html#a76e562f4714615733d201a180c14b03ca60c99433be2ec360e16d54c9b7bd73cb',1,'nmbs']]]
+  ['rfc822_5fname_0',['rfc822_name',['../structnmbs_1_1confidentiality__label_1_1originator__id.html#ac449d93eb4a78d128262b271819c7bb9ae711387e334188e1d62be3f80cf0c64a',1,'nmbs::confidentiality_label::originator_id']]]
 ];

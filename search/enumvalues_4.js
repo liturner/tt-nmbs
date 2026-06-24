@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['no_5flabel_5fpresent_0',['no_label_present',['../namespacenmbs.html#a76e562f4714615733d201a180c14b03ca330361a8781281964074838818889c01',1,'nmbs']]]
+  ['jid_0',['jid',['../structnmbs_1_1confidentiality__label_1_1originator__id.html#ac449d93eb4a78d128262b271819c7bb9ac727fce51c0960d59ccfeeb0aa7a9849',1,'nmbs::confidentiality_label::originator_id']]]
 ];

@@ -75,8 +75,7 @@ $(function() {
 <div class="header">
   <div class="summary">
 <a href="#namespaces">Namespaces</a> &#124;
-<a href="#func-members">Functions</a> &#124;
-<a href="#var-members">Variables</a>  </div>
+<a href="#func-members">Functions</a>  </div>
   <div class="headertitle"><div class="title">nmbs.h File Reference</div></div>
 </div><!--header-->
 <div class="contents">
@@ -85,6 +84,7 @@ $(function() {
 <a href="#details">More...</a></p>
 <div class="textblock"><code>#include &quot;<a class="el" href="confidentiality__label_8h_source.html">confidentiality_label.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="exceptions_8h_source.html">exceptions.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="constants_8h_source.html">constants.h</a>&quot;</code><br />
 <code>#include &lt;string&gt;</code><br />
 <code>#include &lt;filesystem&gt;</code><br />
 </div>
@@ -100,37 +100,18 @@ Functions</h2></td></tr>
 <tr class="memitem:ae2dc3062a8b4f7fe4e3500bd08f675c3" id="r_ae2dc3062a8b4f7fe4e3500bd08f675c3"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacenmbs.html#ae2dc3062a8b4f7fe4e3500bd08f675c3">nmbs::version</a> ()</td></tr>
 <tr class="memdesc:ae2dc3062a8b4f7fe4e3500bd08f675c3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the semantic version of the library.  <br /></td></tr>
 <tr class="separator:ae2dc3062a8b4f7fe4e3500bd08f675c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acf645b0b25b99c50f6382855d5776a44" id="r_acf645b0b25b99c50f6382855d5776a44"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacenmbs.html#acf645b0b25b99c50f6382855d5776a44">nmbs::write_xmp</a> (const std::filesystem::path &amp;path, const <a class="el" href="structnmbs_1_1confidentiality__label.html">confidentiality_label</a> &amp;<a class="el" href="structnmbs_1_1confidentiality__label.html">confidentiality_label</a>)</td></tr>
-<tr class="memdesc:acf645b0b25b99c50f6382855d5776a44"><td class="mdescLeft">&#160;</td><td class="mdescRight">Writes ADatP‑4778 binding information into an image's XMP metadata.  <br /></td></tr>
-<tr class="separator:acf645b0b25b99c50f6382855d5776a44"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac84bd2d34e5725144735df4dc7e1dfa6" id="r_ac84bd2d34e5725144735df4dc7e1dfa6"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="structnmbs_1_1confidentiality__label.html">confidentiality_label</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacenmbs.html#ac84bd2d34e5725144735df4dc7e1dfa6">nmbs::read_xmp</a> (const std::filesystem::path &amp;path)</td></tr>
-<tr class="separator:ac84bd2d34e5725144735df4dc7e1dfa6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7ee408a07115de11298b6505493377c2" id="r_a7ee408a07115de11298b6505493377c2"><td class="memItemLeft" align="right" valign="top">std::optional&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacenmbs.html#a7ee408a07115de11298b6505493377c2">nmbs::read_xmp_xml</a> (const std::filesystem::path &amp;path)</td></tr>
-<tr class="separator:a7ee408a07115de11298b6505493377c2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="var-members" name="var-members"></a>
-Variables</h2></td></tr>
-<tr class="memitem:a537d8b0a04a913b1c8df64dd5e69654d" id="r_a537d8b0a04a913b1c8df64dd5e69654d"><td class="memItemLeft" align="right" valign="top">constexpr std::string_view&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacenmbs.html#a537d8b0a04a913b1c8df64dd5e69654d">nmbs::s4774_namespace</a> = &quot;urn:nato:stanag:4774:confidentialitymetadatalabel:1:0&quot;</td></tr>
-<tr class="memdesc:a537d8b0a04a913b1c8df64dd5e69654d"><td class="mdescLeft">&#160;</td><td class="mdescRight">XML namespace defined by ADatP‑4774 Ed. A, Ver. 1.  <br /></td></tr>
-<tr class="separator:a537d8b0a04a913b1c8df64dd5e69654d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6891f4294c4055af43b60b2b9a6cc286" id="r_a6891f4294c4055af43b60b2b9a6cc286"><td class="memItemLeft" align="right" valign="top">constexpr std::string_view&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacenmbs.html#a6891f4294c4055af43b60b2b9a6cc286">nmbs::s4774_prefix</a> = &quot;s4774&quot;</td></tr>
-<tr class="memdesc:a6891f4294c4055af43b60b2b9a6cc286"><td class="mdescLeft">&#160;</td><td class="mdescRight">Preferred XML prefix for the ADatP‑4774 namespace.  <br /></td></tr>
-<tr class="separator:a6891f4294c4055af43b60b2b9a6cc286"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac2cae1e641ab17a6b355356016b434e3" id="r_ac2cae1e641ab17a6b355356016b434e3"><td class="memItemLeft" align="right" valign="top">constexpr std::string_view&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacenmbs.html#ac2cae1e641ab17a6b355356016b434e3">nmbs::s4778_namespace</a> = &quot;urn:nato:stanag:4778:bindinginformation:1:0&quot;</td></tr>
-<tr class="memdesc:ac2cae1e641ab17a6b355356016b434e3"><td class="mdescLeft">&#160;</td><td class="mdescRight">XML namespace defined by ADatP‑4778 Ed. A, Ver. 1.  <br /></td></tr>
-<tr class="separator:ac2cae1e641ab17a6b355356016b434e3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af0846e9951b47088f097f4eafa6af46c" id="r_af0846e9951b47088f097f4eafa6af46c"><td class="memItemLeft" align="right" valign="top">constexpr std::string_view&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacenmbs.html#af0846e9951b47088f097f4eafa6af46c">nmbs::s4778_prefix</a> = &quot;s4778&quot;</td></tr>
-<tr class="memdesc:af0846e9951b47088f097f4eafa6af46c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Preferred XML prefix for the ADatP‑4778 namespace.  <br /></td></tr>
-<tr class="separator:af0846e9951b47088f097f4eafa6af46c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a61366abdfdaad7418ece83d799fee674" id="r_a61366abdfdaad7418ece83d799fee674"><td class="memItemLeft" align="right" valign="top">constexpr std::string_view&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacenmbs.html#a61366abdfdaad7418ece83d799fee674">nmbs::s4778_xmp_namespace</a> = &quot;urn:nato:stanag:4778:bindinginformation:1:0:xmp#&quot;</td></tr>
-<tr class="memdesc:a61366abdfdaad7418ece83d799fee674"><td class="mdescLeft">&#160;</td><td class="mdescRight">XMP namespace defined for ADatP‑4778 binding information.  <br /></td></tr>
-<tr class="separator:a61366abdfdaad7418ece83d799fee674"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0d8845f309092e16a754f263f36d1a33" id="r_a0d8845f309092e16a754f263f36d1a33"><td class="memItemLeft" align="right" valign="top">constexpr std::string_view&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacenmbs.html#a0d8845f309092e16a754f263f36d1a33">nmbs::s4778_xmp_prefix</a> = &quot;mbxmp&quot;</td></tr>
-<tr class="memdesc:a0d8845f309092e16a754f263f36d1a33"><td class="mdescLeft">&#160;</td><td class="mdescRight">Preferred XML prefix for the ADatP‑4778 XMP namespace.  <br /></td></tr>
-<tr class="separator:a0d8845f309092e16a754f263f36d1a33"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aac0448e0bcbceadc36da21763804a103" id="r_aac0448e0bcbceadc36da21763804a103"><td class="memItemLeft" align="right" valign="top">constexpr std::string_view&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacenmbs.html#aac0448e0bcbceadc36da21763804a103">nmbs::s4778_key</a> = &quot;bindingInformation&quot;</td></tr>
-<tr class="memdesc:aac0448e0bcbceadc36da21763804a103"><td class="mdescLeft">&#160;</td><td class="mdescRight">Local name used for the ADatP‑4778 XMP property.  <br /></td></tr>
-<tr class="separator:aac0448e0bcbceadc36da21763804a103"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4d60d5a99dd17fe76892c12757119650" id="r_a4d60d5a99dd17fe76892c12757119650"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacenmbs.html#a4d60d5a99dd17fe76892c12757119650">nmbs::write_labels</a> (const std::filesystem::path &amp;path, const std::vector&lt; <a class="el" href="structnmbs_1_1confidentiality__label.html">confidentiality_label</a> &gt; &amp;confidentiality_labels)</td></tr>
+<tr class="memdesc:a4d60d5a99dd17fe76892c12757119650"><td class="mdescLeft">&#160;</td><td class="mdescRight">Writes ADatP‑4778 binding information using the best possible binding profile. Embedded is preferred over Sidecar, and the presence of a Sidecar is ignored if embedding is possible. Furthermore, existing data will be overridden.  <br /></td></tr>
+<tr class="separator:a4d60d5a99dd17fe76892c12757119650"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a90a9a8bf6127e72a1c98a04f03e096af" id="r_a90a9a8bf6127e72a1c98a04f03e096af"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacenmbs.html#a90a9a8bf6127e72a1c98a04f03e096af">nmbs::write_labels_xml</a> (const std::filesystem::path &amp;path, const std::string &amp;confidentiality_labels)</td></tr>
+<tr class="memdesc:a90a9a8bf6127e72a1c98a04f03e096af"><td class="mdescLeft">&#160;</td><td class="mdescRight">Writes raw XML packet to the file, using the best possible binding profile. Embedded is preferred over Sidecar, and the presence of a Sidecar is ignored if embedding is possible. Furthermore, existing data will be overridden. No checks for valid labels are performed.  <br /></td></tr>
+<tr class="separator:a90a9a8bf6127e72a1c98a04f03e096af"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3ed7ef415572610a1ba9d97df8b68bf1" id="r_a3ed7ef415572610a1ba9d97df8b68bf1"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="structnmbs_1_1confidentiality__label.html">confidentiality_label</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacenmbs.html#a3ed7ef415572610a1ba9d97df8b68bf1">nmbs::read_labels</a> (const std::filesystem::path &amp;path)</td></tr>
+<tr class="memdesc:a3ed7ef415572610a1ba9d97df8b68bf1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reads the ADatP-4774 labels from the file.  <br /></td></tr>
+<tr class="separator:a3ed7ef415572610a1ba9d97df8b68bf1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab7c2acae7381d29718e83a33e340b66b" id="r_ab7c2acae7381d29718e83a33e340b66b"><td class="memItemLeft" align="right" valign="top">std::optional&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacenmbs.html#ab7c2acae7381d29718e83a33e340b66b">nmbs::read_labels_xml</a> (const std::filesystem::path &amp;path)</td></tr>
+<tr class="memdesc:ab7c2acae7381d29718e83a33e340b66b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reads the ADatP-4774 labels from the file.  <br /></td></tr>
+<tr class="separator:ab7c2acae7381d29718e83a33e340b66b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>The intended "include all" header file for libnmbs. </p>

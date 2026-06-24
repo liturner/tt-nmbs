@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['read_5fxmp_0',['read_xmp',['../namespacenmbs.html#ac84bd2d34e5725144735df4dc7e1dfa6',1,'nmbs']]],
-  ['read_5fxmp_5fxml_1',['read_xmp_xml',['../namespacenmbs.html#a7ee408a07115de11298b6505493377c2',1,'nmbs']]]
+  ['id_5ftype_5fstring_0',['id_type_string',['../structnmbs_1_1confidentiality__label_1_1originator__id.html#a97815ef3bf1de9cf8026e57c5d6feee2',1,'nmbs::confidentiality_label::originator_id']]]
 ];

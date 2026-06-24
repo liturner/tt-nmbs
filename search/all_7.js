@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['metadata_0',['metadata',['../structnmbs_1_1confidentiality__label.html#a0e1a396a8e0eb34f40b03a1c10261144a91a3339c2e62a5287baa40325660e4a8',1,'nmbs::confidentiality_label']]]
+  ['jid_0',['jid',['../structnmbs_1_1confidentiality__label_1_1originator__id.html#ac449d93eb4a78d128262b271819c7bb9ac727fce51c0960d59ccfeeb0aa7a9849',1,'nmbs::confidentiality_label::originator_id']]]
 ];
