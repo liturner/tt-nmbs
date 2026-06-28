@@ -1,4 +1,4 @@
-tt-nmbs (1.0.0~alpha3) UNRELEASED; urgency=medium
+tt-nmbs (1.0.0~alpha3) trixie; urgency=medium
 
   * Add REST Binding Profile of ADatP-4778.2 Ed.A V.1
   * Add Sidecar Binding Profile of ADatP-4778.2 Ed.A V.1
@@ -7,7 +7,7 @@ tt-nmbs (1.0.0~alpha3) UNRELEASED; urgency=medium
   * Add MIME Info for .bdo and .spif
   * Refactor C API
 
- -- Luke Ian Turner <turnertech@outlook.de>  Fri, 26 Jun 2026 10:47:28 +0200
+ -- Luke Ian Turner <turnertech@outlook.de>  Sun, 28 Jun 2026 12:48:49 +0200
 
 tt-nmbs (1.0.0~alpha2) trixie; urgency=medium
 
