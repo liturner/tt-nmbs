@@ -8,7 +8,6 @@ target_sources(NMBS-Library
         TYPE HEADERS
         BASE_DIRS include
         FILES
-        include/nmbs/c/nmbs.h
         include/nmbs/binding.h
         include/nmbs/confidentiality_label.h
         include/nmbs/constants.h
@@ -16,6 +15,7 @@ target_sources(NMBS-Library
         include/nmbs/exceptions.h
         include/nmbs/exit_code.h
         include/nmbs/nmbs.h
+        include/nmbs/nmbs_c.h
         include/nmbs/spif.h
         PRIVATE
         src/nmbs_private.h

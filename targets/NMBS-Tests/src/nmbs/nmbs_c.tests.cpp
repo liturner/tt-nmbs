@@ -1,8 +1,8 @@
-/// @file basic.tests.cpp
-/// @brief Misc tests
+/// @file nmbs_c.tests.cpp
+/// @brief Tests for the C API
 ///
 /// @author Luke Ian Turner
-/// @date 2026-06-10
+/// @date 2026-07-01
 /// @copyright Copyright (c) 2026 Luke Ian Turner
 /// @copyright
 /// Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -25,21 +25,23 @@
 
 #include <nmbs/test.h>
 
-TEST(XMP, Read)
+TEST(C, NewDeleteConfidentialityLabels)
 {
-    const auto labels = nmbs::read_labels("resources/test-public-unmarked.jpg");
-    ASSERT_EQ(labels.size(), 1);
-    ASSERT_EQ(labels[0].label_type, nmbs::confidentiality_label::originator);
-    ASSERT_EQ(labels[0].confidentiality_information.policy_identifier, "PUBLIC");
-    ASSERT_EQ(labels[0].confidentiality_information.classification, "UNMARKED");
-    nmbs::cleanup_state();
+    auto labels = nmbs_confidentiality_labels_new();
+    ASSERT_NE(labels, nullptr);
+    nmbs_confidentiality_labels_delete(labels);
+    ASSERT_NE(labels, nullptr);
 }
 
-TEST(Sidecar, Write)
+TEST(C, ReadXmpLabels)
 {
-    std::vector<nmbs::confidentiality_label> labels(1);
-    labels[0].confidentiality_information.policy_identifier = "PUBLIC";
-    labels[0].confidentiality_information.classification = "UNMARKED";
-    auto response = nmbs::write_sidecar("resources/test-no-xmp.jpg", labels);
-    ASSERT_NE(response, "");
+    auto labels = nmbs_confidentiality_labels_new();
+    ASSERT_NE(labels, nullptr);
+    nmbs_confidentiality_labels_read_labels(labels, "resources/test-public-unmarked.jpg");
+    ASSERT_EQ(nmbs_confidentiality_labels_size(labels), 1);
+    auto label = nmbs_confidentiality_labels_get(labels, 0);
+    ASSERT_STREQ(nmbs_confidentiality_label_get_policy(label), "PUBLIC");
+    ASSERT_STREQ(nmbs_confidentiality_label_get_classification(label), "UNMARKED");
+    nmbs_confidentiality_labels_delete(labels);
+    nmbs::cleanup_state();
 }

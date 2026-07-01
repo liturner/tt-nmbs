@@ -1,3 +1,9 @@
+tt-nmbs (1.0.0~alpha4) UNRELEASED; urgency=medium
+
+  * Refactor C API
+
+ -- Luke Ian Turner <turnertech@outlook.de>  Wed, 01 Jul 2026 21:21:41 +0200
+
 tt-nmbs (1.0.0~alpha3) trixie; urgency=medium
 
   * Add REST Binding Profile of ADatP-4778.2 Ed.A V.1

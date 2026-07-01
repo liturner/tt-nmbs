@@ -1,7 +1,5 @@
 v1.0.0~alpha3
 TODO: Native XML files can be read for labels. Test it using the NATO SPIF
-TODO: Once Native XML is done, start classifying .bdo files too! Possibly make an assumption that the .bdo is the same classification as its referenced object?
-TODO: "has_label" should be a nautilus property. Currently we chack sidecar and xmp, this is too many calls and does not scale well
 TODO: Binding Information serialisation and deserialisation is very sloppy. We lose all data. Add full (de)serialise functions. We want a Binding Object too....
 TODO: Check code TODOs
 

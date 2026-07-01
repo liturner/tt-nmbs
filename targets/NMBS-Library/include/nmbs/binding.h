@@ -154,6 +154,11 @@ namespace nmbs::binding
         return (flags & flags::recommend_sidecar) != flags::none;
     }
 
+    [[nodiscard]] constexpr bool has_labels(const flags flags) noexcept
+    {
+        return has_sidecar(flags) || has_xmp(flags);
+    }
+
     /// @brief Full file analysis to check the binding capabilities of the path.
     /// This function is written for speed, but it does necessarily perform several IO operations.
     /// Care should be taken to cache the result if possible.

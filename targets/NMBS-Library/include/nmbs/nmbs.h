@@ -28,7 +28,6 @@
 #pragma once
 
 #include "confidentiality_label.h"
-#include "exceptions.h"
 
 #include <string>
 #include <filesystem>
@@ -47,12 +46,15 @@ namespace nmbs
 {
 
     /// @brief Returns the semantic version of the library.
-    ///
-    /// Provides the version identifier for this binary build using standard
+    /// @details the version identifier for this binary build using standard
     /// semantic‑versioning format (`MAJOR.MINOR.PATCH`), for example `1.0.0`.
-    ///
     /// @return The semantic version string for the current build.
     [[nodiscard]] std::string version();
+
+    /// @brief Free up any allocated memory and state to keep tools like Valgrind clean.
+    /// @details This should be safe to call in the middle of an application, it will just
+    /// delete caches and unregister namespaces etc.
+    void cleanup_state();
 
     /// @brief Writes ADatP‑4778 binding information using the best possible binding profile.
     /// Embedded is preferred over Sidecar, and the presence of a Sidecar is ignored if

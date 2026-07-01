@@ -49,7 +49,7 @@ try
     std::string output = nmbs::write_labels(file, labels_to_write);
     
     // Note that single files can contain multiple labels (e.g. NATO / ACME / PUBLIC)
-    std::vector<nmbs::confidentiality_label> labels_read = nmbs::read_xmp(file)
+    std::vector<nmbs::confidentiality_label> labels_read = nmbs::read_labels(file)
 }
 catch (const nmbs::exception& e)
 {
@@ -62,5 +62,5 @@ catch (const nmbs::exception& e)
 If you plan to use the limited C API, look into the C header:
 
 ```cpp
-#include <nmbs/c/nmbs.h>
+#include <nmbs/nmbs_c.h>
 ```

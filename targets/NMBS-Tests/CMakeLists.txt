@@ -7,6 +7,7 @@ configure_file(resources/spif/PUBLIC.spif resources/spif/PUBLIC.spif COPYONLY)
 add_executable(NMBS-Tests
         src/nmbs/basic.tests.cpp
         src/nmbs/http.tests.cpp
+        src/nmbs/nmbs_c.tests.cpp
         src/nmbs/spif.tests.cpp
         src/nmbs/xml.tests.cpp
         src/nmbs/test.h

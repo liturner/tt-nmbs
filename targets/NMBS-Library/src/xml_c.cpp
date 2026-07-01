@@ -26,6 +26,7 @@
 #include "nmbs_private.h"
 #include "nmbs/binding.h"
 #include "nmbs/constants.h"
+#include "nmbs/exceptions.h"
 
 #include <libxml/parser.h>
 #include <libxml/tree.h>

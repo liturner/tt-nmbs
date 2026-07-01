@@ -26,6 +26,7 @@
 #include "nmbs/nmbs.h"
 #include "nmbs/binding.h"
 #include "nmbs/constants.h"
+#include "nmbs/exceptions.h"
 #include "nmbs/version.h"
 #include "nmbs_private.h"
 
@@ -142,6 +143,11 @@ namespace nmbs
     std::string version()
     {
         return project_version;
+    }
+
+    void cleanup_state()
+    {
+        Exiv2::XmpProperties::unregisterNs();
     }
 
     std::string write_labels(const std::filesystem::path& path, const std::vector<confidentiality_label>& confidentiality_labels)

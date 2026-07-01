@@ -51,7 +51,7 @@
     },
     {
       "name": "debug-coverage",
-      "displayName": "Debug Build",
+      "displayName": "Coverage Build",
       "configurePreset": "coverage",
       "configuration": "Debug"
     },

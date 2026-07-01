@@ -1,13 +1,7 @@
 #include <nautilus-extension.h>
 #include <glib-object.h>
 
-#include "nmbs/c/nmbs.h"
-
-/*
- *
- * Nautilus and glib boilerplate
- *
- */
+#include <nmbs/nmbs_c.h>
 
 G_DECLARE_FINAL_TYPE(NmbsProperties, nmbs_properties, NMBS, PROPERTIES, GObject)
 
@@ -36,13 +30,9 @@ G_DEFINE_DYNAMIC_TYPE_EXTENDED(
  *
  */
 
-const char* const nmbs_column_classification_key = "nmbs::policy-classification";
+const char* const nmbs_column_classification_key = "nmbs::marking";
 const char* const nmbs_property_policy_key = "nmbs::policy";
 const char* const nmbs_property_classification_key = "nmbs::classification";
-const char* const nmbs_file_supports_xmp = "nmbs::file-supports-xmp";
-const char* const nmbs_file_has_xmp = "nmbs::file-has-xmp";
-const char* const nmbs_file_supports_sidecar = "nmbs::file-supports-sidecar";
-const char* const nmbs_file_has_sidecar = "nmbs::file-has-sidecar";
 const char* const nmbs_file_has_label = "nmbs::file-has-label";
 
 // Little helper for getting our bool style flags out
@@ -80,43 +70,36 @@ static NautilusOperationResult nmbs_properties_update_file_info(
         const uint32_t flags = nmbs_binding_flags_read_support(path_str);
         g_log("NMBS", G_LOG_LEVEL_DEBUG, "Flags for %s: %x", path_str, flags);
 
-        nautilus_file_info_add_string_attribute(file, nmbs_file_supports_xmp, flags & nmbs_binding_supports_xmp ? "TRUE" : "FALSE" );
-        nautilus_file_info_add_string_attribute(file, nmbs_file_has_xmp, flags & nmbs_binding_has_xmp ? "TRUE" : "FALSE" );
-        nautilus_file_info_add_string_attribute(file, nmbs_file_supports_sidecar, flags & nmbs_binding_supports_sidecar ? "TRUE" : "FALSE" );
-        nautilus_file_info_add_string_attribute(file, nmbs_file_has_sidecar, flags & nmbs_binding_has_sidecar ? "TRUE" : "FALSE" );
-
-        // Assume the label is corrupt! Gets set to true, first once successfully read.
+        // Assume the label is corrupt to start! Gets set to true, first once successfully read.
         nautilus_file_info_add_string_attribute(file, nmbs_file_has_label, "FALSE");
 
-        if (flags & nmbs_binding_has_xmp || flags & nmbs_binding_has_sidecar)
+        if (nmbs_binding_flags_has_labels(flags))
         {
             g_log("NMBS", G_LOG_LEVEL_DEBUG, "Reading Labels for %s", path_str);
             auto labels = nmbs_confidentiality_labels_new();
             nmbs_confidentiality_labels_read_labels(labels, path_str);
             g_free(path_str);
-            // Should never happen. Indicates the Xmp key for a binding existed, but no label was in the binding. Definate error!
-            if (labels->size <= 0)
-            {
-                nmbs_confidentiality_labels_delete(labels);
-                return NAUTILUS_OPERATION_COMPLETE;
-            }
 
-            for (int i = 0; i < labels->size; i++)
+            for (unsigned long i = 0; i < nmbs_confidentiality_labels_size(labels); ++i)
             {
-                if (!(labels->label[i].policy_identifier && labels->label[i].classification))
+                auto label = nmbs_confidentiality_labels_get(labels, i);
+                auto label_policy = nmbs_confidentiality_label_get_policy(label);
+                auto label_classification = nmbs_confidentiality_label_get_policy(label);
+
+                if (label == nullptr || !label_policy || !label_classification)
                 {
                     continue;
                 }
 
-                char* classification = g_strconcat(labels->label[i].policy_identifier, ":", labels->label[i].classification, NULL);
+                char* classification = g_strconcat(label_policy, ":", label_classification, NULL);
                 if (!classification)
                 {
                     g_free(classification);
                     continue;
                 }
                 nautilus_file_info_add_string_attribute(file, nmbs_column_classification_key, classification);
-                nautilus_file_info_add_string_attribute(file, nmbs_property_policy_key, labels->label[i].policy_identifier);
-                nautilus_file_info_add_string_attribute(file, nmbs_property_classification_key, labels->label[i].classification);
+                nautilus_file_info_add_string_attribute(file, nmbs_property_policy_key, label_policy);
+                nautilus_file_info_add_string_attribute(file, nmbs_property_classification_key, label_classification);
                 nautilus_file_info_add_string_attribute(file, nmbs_file_has_label, "TRUE");
 
                 g_free(classification);
@@ -151,12 +134,12 @@ static void on_classify_item_activated(NautilusMenuItem* menu_item, gpointer use
     g_object_get(G_OBJECT(menu_item), "name", &item_name, NULL);
     char **tokens = g_strsplit(item_name, ":", 4);
 
-    nmbs_confidentiality_labels labels;
-    nmbs_confidentiality_label label;
-    label.policy_identifier = tokens[2];
-    label.classification = tokens[3];
-    labels.size = 1;
-    labels.label = &label;
+    nmbs_confidentiality_labels_ptr labels = nmbs_confidentiality_labels_new();
+    nmbs_confidentiality_label_ptr label = nmbs_confidentiality_labels_emplace_back(labels);
+    char* label_policy = tokens[2];
+    char* label_classification = tokens[3];
+    nmbs_confidentiality_label_set_policy(label, label_policy);
+    nmbs_confidentiality_label_set_classification(label, label_classification);
 
     for (GList* l = files; l != NULL; l = l->next)
     {
@@ -169,14 +152,14 @@ static void on_classify_item_activated(NautilusMenuItem* menu_item, gpointer use
         char* path_str = g_file_get_path(location);
         g_object_unref(location);
 
-        const int return_code = nmbs_confidentiality_labels_write_labels(path_str, &labels);
+        const int return_code = nmbs_confidentiality_labels_write_labels(path_str, labels);
         if (return_code == 0)
         {
-            g_log("NMBS", G_LOG_LEVEL_MESSAGE, "Classified %s as %s:%s", path_str, label.policy_identifier, label.classification);
+            g_log("NMBS", G_LOG_LEVEL_MESSAGE, "Classified %s as %s:%s", path_str, label_policy, label_classification);
         }
         else
         {
-            g_log("NMBS", G_LOG_LEVEL_CRITICAL, "Failed to classify %s as %s:%s. Error code: %d", path_str, label.policy_identifier, label.classification, return_code);
+            g_log("NMBS", G_LOG_LEVEL_CRITICAL, "Failed to classify %s as %s:%s. Error code: %d", path_str, label_policy, label_classification, return_code);
         }
 
         g_free(path_str);
@@ -184,6 +167,7 @@ static void on_classify_item_activated(NautilusMenuItem* menu_item, gpointer use
 
     g_strfreev(tokens);
     g_free(item_name);
+    nmbs_confidentiality_labels_delete(labels);
 }
 
 /// This little guy just exists as the normal use throws warnings. The glib API was a little dirty
@@ -217,9 +201,7 @@ static GList* nmbs_properties_get_file_items(
     }
 
     NautilusFileInfo* file = NAUTILUS_FILE_INFO(files->data);
-    const bool file_supports_xmp = nmbs_get_file_info_bool_attribute(file, nmbs_file_supports_xmp);
-    const bool file_supports_sidecar = nmbs_get_file_info_bool_attribute(file, nmbs_file_supports_sidecar);
-    if (!(file_supports_xmp || file_supports_sidecar))
+    if (!nmbs_get_file_info_bool_attribute(file, nmbs_file_has_label))
     {
         return nullptr;
     }
@@ -235,12 +217,16 @@ static GList* nmbs_properties_get_file_items(
     nmbs_security_policies_read_installed(policies);
     NautilusMenu* policy_submenu = nautilus_menu_new();
 
-    for (unsigned long i = 0; i < policies->size; ++i)
+    for (unsigned long i = 0; i < nmbs_security_policies_size(policies); ++i)
     {
-        char policy_name[128] = "NMBS:Menu:Policy:";
+        auto const policy = nmbs_security_policies_get(policies, i);
+        auto const policy_name = nmbs_security_policy_get_name(policy);
+        auto const policy_classifications = nmbs_security_policy_get_security_classifications(policy);
+
+        char menu_name[128] = "NMBS:Menu:Policy:";
         NautilusMenuItem* policy_submenu_item = nautilus_menu_item_new(
-            strcat(policy_name, policies->policy[i].name),
-            policies->policy[i].name,
+            strncat(menu_name, policy_name, sizeof(menu_name) - strlen(menu_name) - 1),
+            policy_name,
             "Tag this file with ADatP-4774 classification metadata",
             nullptr
         );
@@ -248,16 +234,18 @@ static GList* nmbs_properties_get_file_items(
         NautilusMenu* classification_submenu = nautilus_menu_new();
         nautilus_menu_item_set_submenu(policy_submenu_item, classification_submenu);
 
-
-        for (unsigned long j = 0; j < policies->policy[i].classification_count; ++j)
+        for (unsigned long j = 0; j < nmbs_security_classifications_size(policy_classifications); ++j)
         {
+            auto const policy_classification = nmbs_security_classifications_get(policy_classifications, i);
+            auto const policy_classification_name = nmbs_security_classification_get_name(policy_classification);
+
             char classification_name[128] = "NMBS:Classification:";
-            strcat(classification_name, policies->policy[i].name);
+            strcat(classification_name, policy_name);
             strcat(classification_name, ":");
-            strcat(classification_name, policies->policy[i].security_classifications[j].name);
+            strcat(classification_name, policy_classification_name);
             NautilusMenuItem* classification_submenu_item = nautilus_menu_item_new(
                 classification_name,
-                policies->policy[i].security_classifications[j].name,
+                policy_classification_name,
                 "Tag this file with ADatP-4774 classification metadata",
                 nullptr
             );
@@ -293,11 +281,7 @@ static GList* nmbs_properties_get_models(NautilusPropertiesModelProvider*, GList
     }
     NautilusFileInfo* file = NAUTILUS_FILE_INFO(files->data);
     GList* items = nullptr;
-
-
-    bool file_has_xmp = nmbs_get_file_info_bool_attribute(file, nmbs_file_has_xmp);
-    bool file_has_sidecar = nmbs_get_file_info_bool_attribute(file, nmbs_file_has_sidecar);
-    if (!(file_has_xmp || file_has_sidecar))
+    if (!nmbs_get_file_info_bool_attribute(file, nmbs_file_has_label))
     {
         return items;
     }
