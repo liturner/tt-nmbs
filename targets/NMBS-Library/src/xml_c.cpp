@@ -26,7 +26,6 @@
 #include "nmbs_private.h"
 #include "nmbs/binding.h"
 #include "nmbs/constants.h"
-#include "nmbs/exceptions.h"
 
 #include <libxml/parser.h>
 #include <libxml/tree.h>
@@ -38,6 +37,8 @@
 #include <chrono>
 #include <cstring>
 #include <string>
+
+#include "nmbs/expected.h"
 
 namespace nmbs::xml
 {
@@ -125,7 +126,7 @@ namespace nmbs::xml
     }
 
 
-    binding::binding_information deserialise_binding_information(const std::string& xml)
+    expected<binding::binding_information> deserialise_binding_information(const std::string& xml)
     {
         binding::binding_information bdo;
 
@@ -133,13 +134,13 @@ namespace nmbs::xml
             xmlReadMemory(xml.c_str(), static_cast<int>(xml.length()), nullptr, nullptr, 0)
         );
         if (!xml_doc) {
-            throw exceptions::xml_could_not_parse_exception();
+            return std::unexpected(error::xml_could_not_parse());
         }
 
         const std::unique_ptr<xmlXPathContext, XmlXPathCtxDeleter> xpath_ctx(xmlXPathNewContext(xml_doc.get()));
         if (!xpath_ctx)
         {
-            throw exceptions::xml_could_not_create_xpath_context_exception();
+            return std::unexpected(error::xml_could_not_create_xpath_context());
         }
 
         // Here we go to string as the string_view handles null termination differently. The tiny overhead is not a
@@ -157,11 +158,11 @@ namespace nmbs::xml
 
         const std::unique_ptr<xmlXPathObject, XmlXPathObjDeleter> binding_information_element(xmlXPathEvalExpression(reinterpret_cast<const xmlChar*>("//s4778:BindingInformation"), xpath_ctx.get()));
         if (!binding_information_element || binding_information_element->nodesetval->nodeNr == 0) {
-            throw exceptions::xml_could_not_parse_exception("Could not parse XML. Could not find BindingInformation Element");
+            return std::unexpected(error::xml_could_not_parse("Could not parse XML. Could not find BindingInformation Element"));
         }
 
         if (binding_information_element->nodesetval->nodeNr != 1) {
-            throw exceptions::xml_could_not_parse_exception("Could not parse XML. Found multiple BindingInformation Elements");
+            return std::unexpected(error::xml_could_not_parse("Could not parse XML. Found multiple BindingInformation Elements"));
         }
 
         bdo.reference.uri = get_relative_xpath_node_value(binding_information_element->nodesetval->nodeTab[0], xpath_ctx.get(), ".//s4778:DataReference/@URI").value_or("");
@@ -203,7 +204,7 @@ namespace nmbs::xml
                 );
                 if (!node_value)
                 {
-                    throw exceptions::xml_could_not_parse_exception("Could not parse ConfidentialityInformation element. No PolicyIdentifier, although it is a mandatory element.");
+                    return std::unexpected(error::xml_could_not_parse("Could not parse ConfidentialityInformation element. No PolicyIdentifier, although it is a mandatory element."));
                 }
                 current_label.confidentiality_information.policy_identifier = node_value.value();
 
@@ -213,7 +214,7 @@ namespace nmbs::xml
                 );
                 if (!node_value)
                 {
-                    throw exceptions::xml_could_not_parse_exception("Could not parse ConfidentialityInformation element. No Classification, although it is a mandatory element.");
+                    return std::unexpected(error::xml_could_not_parse("Could not parse ConfidentialityInformation element. No Classification, although it is a mandatory element."));
                 }
                 current_label.confidentiality_information.classification = node_value.value();
 
@@ -223,7 +224,7 @@ namespace nmbs::xml
                 );
                 if (!node_value)
                 {
-                    throw exceptions::xml_could_not_parse_exception("Could not parse *ConfidentialityLabel element. No CreationDateTime, although it is a mandatory element.");
+                    return std::unexpected(error::xml_could_not_parse("Could not parse *ConfidentialityLabel element. No CreationDateTime, although it is a mandatory element."));
                 }
 
                 std::istringstream in_stream(node_value.value());
@@ -231,7 +232,7 @@ namespace nmbs::xml
                 const std::string in_format = "%FT%TZ";
                 in_stream >> std::chrono::parse(in_format, current_label.creation_date_time);
                 if (in_stream.fail()) {
-                    throw exceptions::xml_could_not_parse_exception("Could not parse *ConfidentialityLabel element. CreationDateTime could not be parsed. Maybe wrong format?");
+                    return std::unexpected(error::xml_could_not_parse("Could not parse *ConfidentialityLabel element. CreationDateTime could not be parsed. Maybe wrong format?"));
                 }
 
                 auto originator_id_type= get_relative_xpath_node_value(binding_node, xpath_ctx.get(), ".//s4774:OriginatorID/@IDType");
@@ -250,7 +251,7 @@ namespace nmbs::xml
         return bdo;
     }
 
-    [[nodiscard]] spif::security_policy deserialise_security_policy(const std::string& xml)
+    [[nodiscard]] expected<spif::security_policy> deserialise_security_policy(const std::string& xml)
     {
         spif::security_policy spif;
 
@@ -259,13 +260,13 @@ namespace nmbs::xml
         );
         if (!xml_doc)
         {
-            throw exceptions::xml_could_not_parse_exception();
+            return std::unexpected(error::xml_could_not_parse());
         }
 
         const std::unique_ptr<xmlXPathContext, XmlXPathCtxDeleter> xpath_ctx(xmlXPathNewContext(xml_doc.get()));
         if (!xpath_ctx)
         {
-            throw exceptions::xml_could_not_create_xpath_context_exception();
+            return std::unexpected(error::xml_could_not_create_xpath_context());
         }
 
         // Here we go to string as the string_view handles null termination differently. The tiny overhead is not a
@@ -282,11 +283,11 @@ namespace nmbs::xml
             xmlXPathEvalExpression(reinterpret_cast<const xmlChar*>("//spif:SPIF"), xpath_ctx.get()));
         if (!binding_information_element || binding_information_element->nodesetval->nodeNr == 0)
         {
-            throw exceptions::xml_could_not_parse_exception("Could not parse SPIF. Could not find SPIF Element");
+            return std::unexpected(error::xml_could_not_parse("Could not parse SPIF. Could not find SPIF Element"));
         }
         if (binding_information_element->nodesetval->nodeNr != 1)
         {
-            throw exceptions::xml_could_not_parse_exception("Could not parse SPIF. Found multiple SPIF Elements");
+            return std::unexpected(error::xml_could_not_parse("Could not parse SPIF. Found multiple SPIF Elements"));
         }
 
         xmlNodePtr root_element = binding_information_element->nodesetval->nodeTab[0];
@@ -299,14 +300,14 @@ namespace nmbs::xml
         }
         catch (...)
         {
-            throw exceptions::xml_could_not_parse_exception("Could not parse SPIF. ./@version was missing or invalid");
+            return std::unexpected(error::xml_could_not_parse("Could not parse SPIF. ./@version was missing or invalid"));
         }
 
         auto security_classification_nodes = std::unique_ptr<xmlXPathObject, XmlXPathObjDeleter>(xmlXPathEvalExpression(
             reinterpret_cast<const xmlChar*>("//spif:securityClassification"), xpath_ctx.get()));
         if (!security_classification_nodes || xmlXPathNodeSetIsEmpty(security_classification_nodes->nodesetval))
         {
-            throw exceptions::xml_could_not_parse_exception("Could not parse SPIF. Found no securityClassification Elements");
+            return std::unexpected(error::xml_could_not_parse("Could not parse SPIF. Found no securityClassification Elements"));
         }
 
         for (int i = 0; i < security_classification_nodes->nodesetval->nodeNr; ++i)
@@ -322,7 +323,7 @@ namespace nmbs::xml
             }
             catch (...)
             {
-                throw exceptions::xml_could_not_parse_exception("Could not parse SPIF. securityClassification/@hierarchy was missing or invalid");
+                return std::unexpected(error::xml_could_not_parse("Could not parse SPIF. securityClassification/@hierarchy was missing or invalid"));
             }
 
             try
@@ -331,7 +332,7 @@ namespace nmbs::xml
             }
             catch (...)
             {
-                throw exceptions::xml_could_not_parse_exception("Could not parse SPIF. securityClassification/@lacv was missing or invalid");
+                return std::unexpected(error::xml_could_not_parse("Could not parse SPIF. securityClassification/@lacv was missing or invalid"));
             }
 
             current_classification.colour = get_relative_xpath_node_value(security_classification_node, xpath_ctx.get(), "./@color");

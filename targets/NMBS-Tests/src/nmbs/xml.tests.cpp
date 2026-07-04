@@ -85,7 +85,7 @@ TEST(XML, DeserialiseSingleLabel)
 {
     NMBS_REQUIREMENT_STANDARD_4778_2_A1
 
-    const nmbs::binding::binding_information bdo = nmbs::xml::deserialise_binding_information(binding_information_1);
+    const nmbs::binding::binding_information bdo = nmbs::xml::deserialise_binding_information(binding_information_1).value();
 
     // 2026-06-26T12:47:51Z
     constexpr std::chrono::utc_seconds expected_utc_time{std::chrono::seconds{1782478098}};
@@ -102,7 +102,7 @@ TEST(XML, DeserialiseDualLabel)
 {
     NMBS_REQUIREMENT_STANDARD_4778_2_A1
 
-    const nmbs::binding::binding_information bdo = nmbs::xml::deserialise_binding_information(binding_information_2);
+    const nmbs::binding::binding_information bdo = nmbs::xml::deserialise_binding_information(binding_information_2).value();
 
     // 2026-06-26T12:47:51Z
     constexpr std::chrono::utc_seconds expected_utc_time{std::chrono::seconds{1782478098}};

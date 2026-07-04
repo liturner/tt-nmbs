@@ -11,9 +11,8 @@ target_sources(NMBS-Library
         include/nmbs/binding.h
         include/nmbs/confidentiality_label.h
         include/nmbs/constants.h
-        include/nmbs/exception.h
-        include/nmbs/exceptions.h
         include/nmbs/exit_code.h
+        include/nmbs/expected.h
         include/nmbs/nmbs.h
         include/nmbs/nmbs_c.h
         include/nmbs/spif.h

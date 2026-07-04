@@ -30,27 +30,28 @@
 
 #include <string>
 
+#include "nmbs/expected.h"
 #include "nmbs/spif.h"
 
 namespace nmbs
 {
-    [[nodiscard]] std::string write_xmp(const std::filesystem::path& path, const std::vector<confidentiality_label>& confidentiality_labels);
+    [[nodiscard]] expected<std::string> write_xmp(const std::filesystem::path& path, const std::vector<confidentiality_label>& confidentiality_labels);
 
-    [[nodiscard]] std::string write_sidecar(const std::filesystem::path& path, const std::vector<confidentiality_label>& confidentiality_labels);
+    [[nodiscard]] expected<std::string> write_sidecar(const std::filesystem::path& path, const std::vector<confidentiality_label>& confidentiality_labels);
 
     [[nodiscard]] std::vector<confidentiality_label> read_xmp(const std::filesystem::path& path);
 
-    [[nodiscard]] std::optional<std::string> read_xmp_xml(const std::filesystem::path& path);
+    [[nodiscard]] expected<std::string> read_xmp_xml(const std::filesystem::path& path);
 
     [[nodiscard]] std::vector<confidentiality_label> read_sidecar(const std::filesystem::path& path);
 
-    [[nodiscard]] std::optional<std::string> read_sidecar_xml(const std::filesystem::path& path);
+    [[nodiscard]] expected<std::string> read_sidecar_xml(const std::filesystem::path& path);
 
     namespace xml
     {
-        [[nodiscard]] binding::binding_information deserialise_binding_information(const std::string& xml);
+        [[nodiscard]] expected<binding::binding_information> deserialise_binding_information(const std::string& xml);
 
-        [[nodiscard]] spif::security_policy deserialise_security_policy(const std::string& xml);
+        [[nodiscard]] expected<spif::security_policy> deserialise_security_policy(const std::string& xml);
 
         [[nodiscard]] std::string encode_base64(const std::string& input);
 

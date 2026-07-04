@@ -34,6 +34,7 @@ const char* const nmbs_column_classification_key = "nmbs::marking";
 const char* const nmbs_property_policy_key = "nmbs::policy";
 const char* const nmbs_property_classification_key = "nmbs::classification";
 const char* const nmbs_file_has_label = "nmbs::file-has-label";
+const char* const nmbs_file_supports_label = "nmbs::file-supports-label";
 
 // Little helper for getting our bool style flags out
 bool nmbs_get_file_info_bool_attribute(NautilusFileInfo* file, const char* const attribute)
@@ -72,19 +73,25 @@ static NautilusOperationResult nmbs_properties_update_file_info(
 
         // Assume the label is corrupt to start! Gets set to true, first once successfully read.
         nautilus_file_info_add_string_attribute(file, nmbs_file_has_label, "FALSE");
+        nautilus_file_info_add_string_attribute(file, nmbs_file_supports_label, "FALSE");
+
+        if (nmbs_binding_flags_supports_labels(flags))
+        {
+            nautilus_file_info_add_string_attribute(file, nmbs_file_supports_label, "TRUE");
+        }
 
         if (nmbs_binding_flags_has_labels(flags))
         {
             g_log("NMBS", G_LOG_LEVEL_DEBUG, "Reading Labels for %s", path_str);
-            auto labels = nmbs_confidentiality_labels_new();
+            const auto labels = nmbs_confidentiality_labels_new();
             nmbs_confidentiality_labels_read_labels(labels, path_str);
             g_free(path_str);
 
             for (unsigned long i = 0; i < nmbs_confidentiality_labels_size(labels); ++i)
             {
-                auto label = nmbs_confidentiality_labels_get(labels, i);
-                auto label_policy = nmbs_confidentiality_label_get_policy(label);
-                auto label_classification = nmbs_confidentiality_label_get_policy(label);
+                const auto label = nmbs_confidentiality_labels_get(labels, i);
+                const auto label_policy = nmbs_confidentiality_label_get_policy(label);
+                const auto label_classification = nmbs_confidentiality_label_get_classification(label);
 
                 if (label == nullptr || !label_policy || !label_classification)
                 {
@@ -201,7 +208,7 @@ static GList* nmbs_properties_get_file_items(
     }
 
     NautilusFileInfo* file = NAUTILUS_FILE_INFO(files->data);
-    if (!nmbs_get_file_info_bool_attribute(file, nmbs_file_has_label))
+    if (!nmbs_get_file_info_bool_attribute(file, nmbs_file_supports_label))
     {
         return nullptr;
     }
@@ -236,7 +243,7 @@ static GList* nmbs_properties_get_file_items(
 
         for (unsigned long j = 0; j < nmbs_security_classifications_size(policy_classifications); ++j)
         {
-            auto const policy_classification = nmbs_security_classifications_get(policy_classifications, i);
+            auto const policy_classification = nmbs_security_classifications_get(policy_classifications, j);
             auto const policy_classification_name = nmbs_security_classification_get_name(policy_classification);
 
             char classification_name[128] = "NMBS:Classification:";

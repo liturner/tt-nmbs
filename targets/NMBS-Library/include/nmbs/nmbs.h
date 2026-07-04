@@ -27,10 +27,11 @@
 
 #pragma once
 
-#include "confidentiality_label.h"
-
 #include <string>
 #include <filesystem>
+
+#include "confidentiality_label.h"
+#include "expected.h"
 
 /// Lightweight helpers for generating NATO confidentiality metadata.
 ///
@@ -49,12 +50,12 @@ namespace nmbs
     /// @details the version identifier for this binary build using standard
     /// semantic‑versioning format (`MAJOR.MINOR.PATCH`), for example `1.0.0`.
     /// @return The semantic version string for the current build.
-    [[nodiscard]] std::string version();
+    [[nodiscard]] std::string_view version() noexcept;
 
     /// @brief Free up any allocated memory and state to keep tools like Valgrind clean.
     /// @details This should be safe to call in the middle of an application, it will just
     /// delete caches and unregister namespaces etc.
-    void cleanup_state();
+    void cleanup();
 
     /// @brief Writes ADatP‑4778 binding information using the best possible binding profile.
     /// Embedded is preferred over Sidecar, and the presence of a Sidecar is ignored if
@@ -62,8 +63,7 @@ namespace nmbs
     /// @param path to the image file to label.
     /// @param confidentiality_labels collection of labels to write to the file
     /// @return The labels written to the file in XML form.
-    /// @throws nmbs::file_not_found_exception failed to locate the provided path
-    std::string write_labels(const std::filesystem::path& path, const std::vector<confidentiality_label>& confidentiality_labels);
+    [[nodiscard]] expected<std::string> write_labels(const std::filesystem::path& path, const std::vector<confidentiality_label>& confidentiality_labels);
 
     /// @brief Writes raw XML packet to the file, using the best possible binding profile.
     /// Embedded is preferred over Sidecar, and the presence of a Sidecar is ignored if
@@ -72,8 +72,7 @@ namespace nmbs
     /// @param path to the image file to label.
     /// @param confidentiality_labels XML to write to the file
     /// @return The labels written to the file in XML form.
-    /// @throws nmbs::file_not_found_exception failed to locate the provided path
-    std::string write_labels_xml(const std::filesystem::path& path, const std::string& confidentiality_labels);
+    [[nodiscard]] expected<std::string> write_labels_xml(const std::filesystem::path& path, const std::string& confidentiality_labels);
 
     /// @brief Reads the ADatP-4774 labels from the file
     /// @details and returns them in a deserialised form. The deserialization
@@ -82,18 +81,14 @@ namespace nmbs
     /// with other less strict implementations.
     /// @param path to the file
     /// @return a collection of all labels applied to the file
-    /// @throws nmbs::exceptions::file_not_found_exception failed to locate the provided path
-    /// @throws nmbs::exception for all unexpected errors
     /// @see nmbs::write_labels
-    [[nodiscard]] std::vector<confidentiality_label> read_labels(const std::filesystem::path& path);
+    [[nodiscard]] expected<std::vector<confidentiality_label>> read_labels(const std::filesystem::path& path);
 
     /// @brief Reads the ADatP-4774 labels from the file
     /// @details and returns them in their raw XML form
     /// @param path to the file
     /// @return the raw XML of the stored labels
-    /// @throws nmbs::exceptions::file_not_found_exception failed to locate the provided path
-    /// @throws nmbs::exception for all unexpected errors
     /// @see nmbs::write_labels_xml
-    [[nodiscard]] std::optional<std::string> read_labels_xml(const std::filesystem::path& path);
+    [[nodiscard]] expected<std::string> read_labels_xml(const std::filesystem::path& path);
 
 }

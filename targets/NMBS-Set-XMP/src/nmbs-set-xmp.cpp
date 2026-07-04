@@ -32,7 +32,7 @@
 int main(const int argc, char* argv[]) {
 
     // Argument Parsing
-    argparse::ArgumentParser program("nmbs-xmp", nmbs::version());
+    argparse::ArgumentParser program("nmbs-xmp", std::string(nmbs::version()));
     program.add_description("sets the classification tag on XMP compatible file types following the NATO ADatP-4774, ADatP-4778 and ADatP-5636 standards. This is a minimal tagging tool, and is only intended to aid in simple tagging. Further refinement, such as the addition of exemptions or markings is outside the scope of this tool. The use case of this tool is rather to lower the cost of tagging uninteresting files in complex systems (e.g. this tool may be used by software to tag software icons as UNCLASSIFIED, rather than paying thousands for full tagging tools...)");
     program.add_argument("file").help("the file to apply the classification label to");
     program.add_argument("policy").help("the policy identifier (e.g. NATO, ITAR)");
@@ -64,16 +64,18 @@ int main(const int argc, char* argv[]) {
     {
         std::vector<nmbs::confidentiality_label> labels;
         labels.push_back(label);
-        const std::string output = nmbs::write_labels(file,  labels);
-        if (program["--verbose"] == true) {
-            std::cout << "  Key: Xmp." << nmbs::constants::s4778_xmp_prefix << "." << nmbs::constants::s4778_key << std::endl
-            << "Value: " << output << std::endl;
+        auto output = nmbs::write_labels(file,  labels);
+        if (output.has_value())
+        {
+            if (program["--verbose"] == true) {
+                std::cout << "  Key: Xmp." << nmbs::constants::s4778_xmp_prefix << "." << nmbs::constants::s4778_key << std::endl
+                << "Value: " << output.value() << std::endl;
+            }
+            return nmbs::exit_code::success;
         }
-    }
-    catch (const nmbs::exception& e)
-    {
-        std::cerr << e.what() << std::endl;
-        return e.code();
+        std::cerr << output.error().message() << std::endl;
+        return output.error().code();
+
     }
     catch (const std::exception& e)
     {

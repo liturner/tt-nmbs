@@ -28,8 +28,6 @@
 #include <chrono>
 #include <string>
 
-#include "exception.h"
-
 namespace nmbs
 {
     /// @brief Struct representation of the "Confidentiality Label"

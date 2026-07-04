@@ -31,6 +31,7 @@
 #include <sstream>
 #include <string>
 
+#include "nmbs/exit_code.h"
 #include "nmbs_private.h"
 #include "nmbs/binding.h"
 #include "nmbs/spif.h"
@@ -106,17 +107,16 @@ namespace
 
 }
 
-void nmbs_confidentiality_labels_read_labels(const nmbs_confidentiality_labels_ptr labels_out, const char* file) noexcept
+void nmbs_confidentiality_labels_read_labels(nmbs_confidentiality_labels_ptr labels_out, const char* file) noexcept
 {
     try
     {
-        const auto labels = nmbs::read_labels(std::filesystem::path(std::string(file)));
-        auto cpp_labels = to_cpp_labels(labels_out);
+        auto const cpp_labels = to_cpp_labels(labels_out);
         cpp_labels->clear();
-        cpp_labels->insert(cpp_labels->begin(), labels.begin(), labels.end());
-    }
-    catch (const std::exception& e) {
-        std::cerr << "C++ Exception caught in nmbs_confidentiality_labels_read_labels: " << e.what() << std::endl;
+        if (auto const labels = nmbs::read_labels(std::filesystem::path(std::string(file))); labels.has_value())
+        {
+            cpp_labels->insert(cpp_labels->begin(), labels.value().begin(), labels.value().end());
+        }
     }
     catch (...)
     {
@@ -244,12 +244,12 @@ int nmbs_confidentiality_labels_write_labels(const char* file, const nmbs_confid
         {
             return nmbs::unknown_error;
         }
-        nmbs::write_labels(std::filesystem::path(std::string(file)), *cpp_labels);
-        return nmbs::success;
-    }
-    catch (const nmbs::exception& e) {
-        std::cerr << "C++ Exception caught in nmbs_write_labels: " << e.what() << std::endl;
-        return e.code();
+        auto const result = nmbs::write_labels(std::filesystem::path(std::string(file)), *cpp_labels);
+        if (result.has_value())
+        {
+            return nmbs::success;
+        }
+        return result.error().code();
     }
     catch (const std::exception& e) {
         std::cerr << "C++ Exception caught in nmbs_write_labels: " << e.what() << std::endl;
@@ -442,8 +442,26 @@ void nmbs_security_policies_delete(nmbs_security_policies_ptr policies) noexcept
 }
 
 
-bool nmbs_binding_flags_has_labels(uint32_t flags) noexcept
+bool nmbs_binding_flags_has_labels(const uint32_t flags) noexcept
 {
     return nmbs::binding::has_labels(to_cpp_binding_flags(flags));
 }
+
+bool nmbs_binding_flags_supports_labels(const uint32_t flags) noexcept
+{
+    return nmbs::binding::supports_labels(to_cpp_binding_flags(flags));
+}
+
+void nmbs_cleanup() noexcept
+{
+    try
+    {
+        nmbs::cleanup();
+    }
+    catch (...)
+    {
+        std::cerr << "C++ Exception caught in during nmbs_cleanup." << std::endl;
+    }
+}
+
 

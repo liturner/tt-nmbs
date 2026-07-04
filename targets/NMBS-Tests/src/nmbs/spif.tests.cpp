@@ -81,7 +81,7 @@ const std::string error_spif_lacv_1{
 
 TEST(SPIF, Deserialise)
 {
-    const nmbs::spif::security_policy tt_policy = nmbs::xml::deserialise_security_policy(dummy_spif_1);
+    const nmbs::spif::security_policy tt_policy = nmbs::xml::deserialise_security_policy(dummy_spif_1).value();
 
     ASSERT_EQ(tt_policy.name, "TT");
     ASSERT_EQ(tt_policy.id, "temp");
@@ -106,7 +106,7 @@ TEST(SPIF, Deserialise)
 
 TEST(SPIF, DeserialiseLacvIntFalse)
 {
-    EXPECT_THROW(auto temp = nmbs::xml::deserialise_security_policy(error_spif_lacv_1), nmbs::exceptions::xml_could_not_parse_exception);
+    ASSERT_FALSE(nmbs::xml::deserialise_security_policy(error_spif_lacv_1).has_value());
 }
 
 TEST(SPIF, Globals)

@@ -27,12 +27,12 @@
 
 TEST(XMP, Read)
 {
-    const auto labels = nmbs::read_labels("resources/test-public-unmarked.jpg");
+    const auto labels = nmbs::read_labels("resources/test-public-unmarked.jpg").value();
     ASSERT_EQ(labels.size(), 1);
     ASSERT_EQ(labels[0].label_type, nmbs::confidentiality_label::originator);
     ASSERT_EQ(labels[0].confidentiality_information.policy_identifier, "PUBLIC");
     ASSERT_EQ(labels[0].confidentiality_information.classification, "UNMARKED");
-    nmbs::cleanup_state();
+    nmbs::cleanup();
 }
 
 TEST(Sidecar, Write)

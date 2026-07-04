@@ -30,13 +30,9 @@
 #include "nmbs/nmbs.h"
 #include "nmbs/binding.h"
 #include "nmbs/constants.h"
-#include "nmbs/exceptions.h"
 #include "nmbs_private.h"
 
-extern "C"
-{
 #include "nmbs/nmbs_c.h"
-}
 
 #define NMBS_REQUIREMENT_SOURCE(SOURCE) RecordProperty("requirement_source", #SOURCE);
 #define NMBS_REQUIREMENT_TEXT(REQUIREMENT) RecordProperty("requirement_text", #REQUIREMENT);

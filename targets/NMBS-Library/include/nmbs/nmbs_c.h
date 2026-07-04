@@ -127,7 +127,17 @@ typedef struct nmbs_security_policy* nmbs_security_policy_ptr;
 /// @ingroup c_bindings
 /// @param flags
 /// @return
-bool nmbs_binding_flags_has_labels(uint32_t flags) NMBS_NOEXCEPT;
+[[nodiscard]] bool nmbs_binding_flags_has_labels(uint32_t flags) NMBS_NOEXCEPT;
+
+/// @brief
+/// @ingroup c_bindings
+/// @param flags
+/// @return
+[[nodiscard]] bool nmbs_binding_flags_supports_labels(uint32_t flags) NMBS_NOEXCEPT;
+
+/// @brief
+/// @ingroup c_api
+void nmbs_cleanup() NMBS_NOEXCEPT;
 
 /// @brief Creates and returns an instance of nmbs_confidentiality_labels.
 /// @ingroup c_confidentiality_labels
@@ -144,14 +154,14 @@ void nmbs_confidentiality_labels_delete(nmbs_confidentiality_labels_ptr labels) 
 /// @ingroup c_confidentiality_labels
 /// @param labels
 /// @return Pointer to the underlying data. Do not free or delete this!
-nmbs_confidentiality_label_ptr nmbs_confidentiality_labels_emplace_back(nmbs_confidentiality_labels_ptr labels) NMBS_NOEXCEPT;
+[[nodiscard]] nmbs_confidentiality_label_ptr nmbs_confidentiality_labels_emplace_back(nmbs_confidentiality_labels_ptr labels) NMBS_NOEXCEPT;
 
 /// @brief Opaque Accessor
 /// @ingroup c_confidentiality_labels
 /// @param labels
 /// @param i
 /// @return Pointer to the underlying data. Do not free or delete this!
-nmbs_confidentiality_label_ptr nmbs_confidentiality_labels_get(nmbs_confidentiality_labels_ptr labels, unsigned long i) NMBS_NOEXCEPT;
+[[nodiscard]] nmbs_confidentiality_label_ptr nmbs_confidentiality_labels_get(nmbs_confidentiality_labels_ptr labels, unsigned long i) NMBS_NOEXCEPT;
 
 /// @brief Reads the nmbs_confidentiality_labels from a file, regardless of binding profile.
 /// @ingroup c_confidentiality_labels
@@ -164,7 +174,7 @@ void nmbs_confidentiality_labels_read_labels(nmbs_confidentiality_labels_ptr lab
 /// @ingroup c_confidentiality_labels
 /// @param labels
 /// @return
-unsigned long nmbs_confidentiality_labels_size(nmbs_confidentiality_labels_ptr labels) NMBS_NOEXCEPT;
+[[nodiscard]] unsigned long nmbs_confidentiality_labels_size(nmbs_confidentiality_labels_ptr labels) NMBS_NOEXCEPT;
 
 /// @brief Writes ADatP-4774 labels to a file, using the most appropriate method.
 /// @details Any existing labels will be overwritten. If an "append" functionality
@@ -179,13 +189,13 @@ unsigned long nmbs_confidentiality_labels_size(nmbs_confidentiality_labels_ptr l
 /// @ingroup c_confidentiality_labels
 /// @param label
 /// @return Pointer to the underlying data. Do not free or delete this!
-const char* nmbs_confidentiality_label_get_classification(nmbs_confidentiality_label_ptr label) NMBS_NOEXCEPT;
+[[nodiscard]] const char* nmbs_confidentiality_label_get_classification(nmbs_confidentiality_label_ptr label) NMBS_NOEXCEPT;
 
 /// @brief Opaque Accessor
 /// @ingroup c_confidentiality_labels
 /// @param label
 /// @return Pointer to the underlying data. Do not free or delete this!
-const char* nmbs_confidentiality_label_get_policy(nmbs_confidentiality_label_ptr label) NMBS_NOEXCEPT;
+[[nodiscard]] const char* nmbs_confidentiality_label_get_policy(nmbs_confidentiality_label_ptr label) NMBS_NOEXCEPT;
 
 /// @brief Opaque Accessor
 /// @ingroup c_confidentiality_labels

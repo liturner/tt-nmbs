@@ -24,17 +24,17 @@
 /// SOFTWARE.
 
 #include "nmbs/nmbs.h"
-#include "nmbs/binding.h"
-#include "nmbs/constants.h"
-#include "nmbs/exceptions.h"
-#include "nmbs/version.h"
-#include "nmbs_private.h"
 
 #include <exiv2/exiv2.hpp>
 #include <chrono>
 #include <iostream>
 #include <fstream>
 #include <filesystem>
+
+#include "nmbs/binding.h"
+#include "nmbs/constants.h"
+#include "nmbs/version.h"
+#include "nmbs_private.h"
 
 // Anonymous namespace guarantees internal linkage.
 // This symbol will not leak out of this specific .cpp file or the .so.
@@ -69,7 +69,10 @@ namespace
                             {
                                 std::stringstream buffer;
                                 buffer << file.rdbuf();
-                                security_policies.emplace_back(nmbs::xml::deserialise_security_policy(buffer.str()));
+                                if (auto policy = nmbs::xml::deserialise_security_policy(buffer.str()); policy.has_value())
+                                {
+                                    security_policies.emplace_back(policy.value());
+                                }
                             }
                         }
                     }
@@ -92,7 +95,10 @@ namespace
                         {
                             std::stringstream buffer;
                             buffer << file.rdbuf();
-                            security_policies.emplace_back(nmbs::xml::deserialise_security_policy(buffer.str()));
+                            if (auto policy = nmbs::xml::deserialise_security_policy(buffer.str()); policy.has_value())
+                            {
+                                security_policies.emplace_back(policy.value());
+                            }
                         }
                     }
                 }
@@ -109,8 +115,10 @@ namespace
                         {
                             std::stringstream buffer;
                             buffer << file.rdbuf();
-                            security_policies.emplace_back(nmbs::xml::deserialise_security_policy(buffer.str()));
-                        }
+                            if (auto policy = nmbs::xml::deserialise_security_policy(buffer.str()); policy.has_value())
+                            {
+                                security_policies.emplace_back(policy.value());
+                            }                        }
                     }
                 }
             }
@@ -140,23 +148,23 @@ namespace
 
 namespace nmbs
 {
-    std::string version()
+    [[nodiscard]] std::string_view version() noexcept
     {
         return project_version;
     }
 
-    void cleanup_state()
+    void cleanup()
     {
         Exiv2::XmpProperties::unregisterNs();
     }
 
-    std::string write_labels(const std::filesystem::path& path, const std::vector<confidentiality_label>& confidentiality_labels)
+    expected<std::string> write_labels(const std::filesystem::path& path, const std::vector<confidentiality_label>& confidentiality_labels)
     {
         const binding::flags binding_support = binding::support(path);
         if (!binding::supports_labels(binding_support))
         {
             // TODO: Throw here with valid exit code
-            return "";
+            return std::unexpected(error::unexpected());
         }
 
         if (binding::supports_xmp(binding_support))
@@ -170,16 +178,15 @@ namespace nmbs
         }
 
         // TODO: Throw no supported label type
-
-        return "";
+        return std::unexpected(error::unexpected());
     }
 
-    std::string write_labels_xml(const std::filesystem::path& path, const std::string& confidentiality_labels)
+    expected<std::string> write_labels_xml(const std::filesystem::path& path, const std::string& confidentiality_labels)
     {
         return "";
     }
 
-    [[nodiscard]] std::vector<confidentiality_label> read_labels(const std::filesystem::path& path)
+    [[nodiscard]] expected<std::vector<confidentiality_label>> read_labels(const std::filesystem::path& path)
     {
         std::vector<confidentiality_label> return_labels;
         const binding::flags binding_support = binding::support(path);
@@ -203,12 +210,12 @@ namespace nmbs
         return return_labels;
     }
 
-    [[nodiscard]] std::optional<std::string> read_labels_xml(const std::filesystem::path& path)
+    [[nodiscard]] expected<std::string> read_labels_xml(const std::filesystem::path& path)
     {
         const binding::flags binding_support = binding::support(path);
         if (!binding::supports_labels(binding_support))
         {
-            return std::nullopt;;
+            return std::unexpected(error::unexpected());;
         }
 
         if (binding::has_xmp(binding_support))
@@ -216,12 +223,12 @@ namespace nmbs
             return read_xmp_xml(path);
         }
 
-        return std::nullopt;
+        return std::unexpected(error::unexpected());;
     }
 
 
 
-    std::string write_xmp(const std::filesystem::path& path, const std::vector<confidentiality_label>& confidentiality_labels)
+    expected<std::string> write_xmp(const std::filesystem::path& path, const std::vector<confidentiality_label>& confidentiality_labels)
     {
         try
         {
@@ -231,7 +238,7 @@ namespace nmbs
             const auto image = Exiv2::ImageFactory::open(path.string());
             if (image.get() == nullptr)
             {
-                throw exceptions::file_not_found_exception();
+                return std::unexpected(error::file_not_found());
             }
             image->readMetadata();
             Exiv2::XmpData& xmp_data = image->xmpData();
@@ -243,17 +250,17 @@ namespace nmbs
             return payload;
         }
         catch (const Exiv2::Error& e) {
-            throw nmbs::exception(exit_code::unknown_error, "Exiv2::Error: " + std::string(e.what()));
+            return std::unexpected(error::unexpected("Exiv2::Error: " + std::string(e.what())));
         }
     }
 
-    std::string write_sidecar(const std::filesystem::path& path, const std::vector<confidentiality_label>& confidentiality_labels)
+    expected<std::string> write_sidecar(const std::filesystem::path& path, const std::vector<confidentiality_label>& confidentiality_labels)
     {
         try
         {
             if (!std::filesystem::exists(path)) [[unlikely]]
             {
-                throw exceptions::file_not_found_exception();
+                return std::unexpected(error::file_not_found());
             }
 
             std::filesystem::path bdo_path{path};
@@ -274,11 +281,11 @@ namespace nmbs
             return payload;
         }
         catch (const std::exception& e) {
-            throw nmbs::exception(exit_code::unknown_error, "std::exception: " + std::string(e.what()));
+            return std::unexpected(error::unexpected("std::exception: " + std::string(e.what())));
         }
     }
 
-    std::optional<std::string> read_xmp_xml(const std::filesystem::path& path)
+    expected<std::string> read_xmp_xml(const std::filesystem::path& path)
     {
         try
         {
@@ -286,7 +293,7 @@ namespace nmbs
             const auto image = Exiv2::ImageFactory::open(path.string());
             if (image.get() == nullptr)
             {
-                throw exceptions::file_not_found_exception();
+                return std::unexpected(error::file_not_found());
             }
             image->readMetadata();
 
@@ -295,7 +302,7 @@ namespace nmbs
             Exiv2::XmpData& xmp_data = image->xmpData();
             if (xmp_data.empty())
             {
-                throw exceptions::xmp_not_found_exception();
+                return std::unexpected(error::xmp_not_found());
             }
 
             // Here we have XMP, but no label. Its valid to return nullopt
@@ -303,7 +310,7 @@ namespace nmbs
             const auto xmp_iter = xmp_data.findKey(slab_key);
             if (xmp_iter == xmp_data.end())
             {
-                return std::nullopt;
+                return std::unexpected(error::xmp_key_not_found());
             }
 
             // TODO: Improve here. Probably validate that its sane XML or at least not empty?
@@ -312,20 +319,21 @@ namespace nmbs
 
         }
         catch (const Exiv2::Error& e) {
-            throw nmbs::exception(exit_code::unknown_error, "Exiv2::Error: " + std::string(e.what()));
+            return std::unexpected(error::unexpected("Exiv2::Error: " + std::string(e.what())));
         }
     }
 
     std::vector<confidentiality_label> read_xmp(const std::filesystem::path& path)
     {
-        if (const auto label_xml{read_xmp_xml(path)}; label_xml.has_value())
+
+        if (const auto binding = read_xmp_xml(path).and_then(xml::deserialise_binding_information); binding.has_value())
         {
-            return xml::deserialise_binding_information(label_xml.value()).labels;
+            return binding->labels;
         }
         return {};
     }
 
-    [[nodiscard]] std::optional<std::string> read_sidecar_xml(const std::filesystem::path& path)
+    [[nodiscard]] expected<std::string> read_sidecar_xml(const std::filesystem::path& path)
     {
         try
         {
@@ -333,7 +341,7 @@ namespace nmbs
             bdo_path += ".bdo";
             if (!std::filesystem::exists(path) || !std::filesystem::exists(bdo_path)) [[unlikely]]
             {
-                throw exceptions::file_not_found_exception();
+                return std::unexpected(error::file_not_found());
             }
 
             if (std::ifstream bdo_file(bdo_path); bdo_file.is_open())
@@ -342,19 +350,19 @@ namespace nmbs
                 buffer << bdo_file.rdbuf();
                 return buffer.str();
             }
-            return std::nullopt;
+            return std::unexpected(error::unexpected());
         }
         catch (const Exiv2::Error& e)
         {
-            throw nmbs::exception(exit_code::unknown_error, "Exiv2::Error: " + std::string(e.what()));
+            return std::unexpected(error::unexpected("Exiv2::Error: " + std::string(e.what())));
         }
     }
 
     [[nodiscard]] std::vector<confidentiality_label> read_sidecar(const std::filesystem::path& path)
     {
-        if (const auto label_xml{read_sidecar_xml(path)}; label_xml.has_value())
+        if (const auto binding = read_sidecar_xml(path).and_then(xml::deserialise_binding_information); binding.has_value())
         {
-            return xml::deserialise_binding_information(label_xml.value()).labels;
+            return binding->labels;
         }
         return {};
     }
@@ -483,7 +491,12 @@ namespace nmbs
 
                 std::string_view base64_xml = binding_data.substr(start_pos, end_pos - start_pos);
                 std::string xml = xml::decode_base64(base64_xml);
-                return xml::deserialise_binding_information(xml).labels;
+
+                if (const auto binding = xml::deserialise_binding_information(xml); binding.has_value())
+                {
+                    return binding->labels;
+                }
+                return labels;
             }
 
         }

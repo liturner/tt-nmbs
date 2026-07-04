@@ -43,5 +43,5 @@ TEST(C, ReadXmpLabels)
     ASSERT_STREQ(nmbs_confidentiality_label_get_policy(label), "PUBLIC");
     ASSERT_STREQ(nmbs_confidentiality_label_get_classification(label), "UNMARKED");
     nmbs_confidentiality_labels_delete(labels);
-    nmbs::cleanup_state();
+    nmbs::cleanup();
 }
