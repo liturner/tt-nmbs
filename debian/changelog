@@ -1,13 +1,13 @@
-tt-nmbs (1.0.0~beta4) trixie; urgency=medium
+tt-nmbs (1.0.0~4) unstable; urgency=medium
 
   * Add support for reading labels from XML files
   * Refactor C++ API to use std::expected instead of exceptions
   * Update to C++23
   * Refactor C API
 
- -- Luke Ian Turner <turnertech@outlook.de>  Sun, 12 Jul 2026 15:24:14 +0200
+ -- Luke Ian Turner <turnertech@outlook.de>  Sun, 12 Jul 2026 15:35:46 +0200
 
-tt-nmbs (1.0.0~alpha3) trixie; urgency=medium
+tt-nmbs (1.0.0~alpha3) unstable; urgency=medium
 
   * Add REST Binding Profile of ADatP-4778.2 Ed.A V.1
   * Add Sidecar Binding Profile of ADatP-4778.2 Ed.A V.1
@@ -18,7 +18,7 @@ tt-nmbs (1.0.0~alpha3) trixie; urgency=medium
 
  -- Luke Ian Turner <turnertech@outlook.de>  Sun, 28 Jun 2026 12:48:49 +0200
 
-tt-nmbs (1.0.0~alpha2) trixie; urgency=medium
+tt-nmbs (1.0.0~alpha2) unstable; urgency=medium
 
   * Remove binding profile from public API
   * Add C API for use in e.g. Nautilus extensions
@@ -26,7 +26,7 @@ tt-nmbs (1.0.0~alpha2) trixie; urgency=medium
 
  -- Luke Ian Turner <turnertech@outlook.de>  Wed, 24 Jun 2026 22:19:31 +0200
 
-tt-nmbs (1.0.0~alpha1) trixie; urgency=low
+tt-nmbs (1.0.0~alpha1) unstable; urgency=low
 
   * Initial version
   * Add libnmbs1 shared library and package
