@@ -1,4 +1,12 @@
-tt-nmbs (1.0.0~4) unstable; urgency=medium
+nmbs (1.0.0~5) unstable; urgency=medium
+
+  * Improve package descriptions
+  * Add compiler and linker hardening
+  * Update to machine readable (DEP-5) copyright
+
+ -- Luke Ian Turner <turnertech@outlook.de>  Sun, 12 Jul 2026 18:00:24 +0200
+
+nmbs (1.0.0~4) unstable; urgency=medium
 
   * Add support for reading labels from XML files
   * Refactor C++ API to use std::expected instead of exceptions
@@ -7,7 +15,7 @@ tt-nmbs (1.0.0~4) unstable; urgency=medium
 
  -- Luke Ian Turner <turnertech@outlook.de>  Sun, 12 Jul 2026 15:35:46 +0200
 
-tt-nmbs (1.0.0~3) unstable; urgency=medium
+nmbs (1.0.0~3) unstable; urgency=medium
 
   * Add REST Binding Profile of ADatP-4778.2 Ed.A V.1
   * Add Sidecar Binding Profile of ADatP-4778.2 Ed.A V.1
@@ -18,7 +26,7 @@ tt-nmbs (1.0.0~3) unstable; urgency=medium
 
  -- Luke Ian Turner <turnertech@outlook.de>  Sun, 28 Jun 2026 12:48:49 +0200
 
-tt-nmbs (1.0.0~2) unstable; urgency=medium
+nmbs (1.0.0~2) unstable; urgency=medium
 
   * Remove binding profile from public API
   * Add C API for use in e.g. Nautilus extensions
@@ -26,7 +34,7 @@ tt-nmbs (1.0.0~2) unstable; urgency=medium
 
  -- Luke Ian Turner <turnertech@outlook.de>  Wed, 24 Jun 2026 22:19:31 +0200
 
-tt-nmbs (1.0.0~1) unstable; urgency=low
+nmbs (1.0.0~1) unstable; urgency=low
 
   * Initial version
   * Add libnmbs1 shared library and package

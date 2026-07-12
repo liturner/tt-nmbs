@@ -1,26 +1,34 @@
-Source: tt-nmbs
+Source: nmbs
 Section: utils
 Priority: optional
 Maintainer: Luke Ian Turner <turnertech@outlook.de>
-Standards-Version: 4.6.0
+Standards-Version: 4.7.2
 Build-Depends: debhelper-compat (= 13), libexiv2-dev, libargparse-dev, libxml2-dev (>= 2.12.7), libgtest-dev, doxygen, help2man
+Vcs-Git: https://github.com/liturner/tt-nmbs.git
+Vcs-Browser: https://github.com/liturner/tt-nmbs
+Homepage: https://github.com/liturner/tt-nmbs
 
 
 Package: nmbs
-Section: utils
 Architecture: amd64
 Depends: ${shlibs:Depends}, ${misc:Depends}, libnmbs1 (= ${binary:Version})
 Recommends: exiv2
-Description: Normalised Metadata Binding Service
- A set of tools for working with ADatP-4774 and ADatP-4778
- confidentiality labels.
+Description: confidentiality label binding tools
+ A set of tools enabling working with ADatP-4774 and ADatP-4778
+ confidentiality labels, such as the ability to tag Xmp metadata
+ into images with security classifications like PUBLIC UNMARKED
+ or NATO UNCLASSIFIED.
+ CLI tools and a Nautilus extension provide
+ both console and GUI capabilities.
 
 
 Package: libnmbs1
 Section: libs
 Architecture: amd64
 Depends: ${shlibs:Depends}, ${misc:Depends}, libxml2 (>= 2.12.7)
-Description: Runtime shared library for nmbs
+Description: confidentiality label binding support
+ A shared library providing ADatP-4774 and ADatP-4778 support
+ for confidentiality labels of e.g. files.
  Required by e.g. the nmbs CLI tools or Nautilus extension.
 
 
@@ -29,6 +37,7 @@ Section: libdevel
 Architecture: any
 Depends: libnmbs1 (= ${binary:Version}), ${misc:Depends}
 Recommends: dochelp
-Description: Development files nmbs
+Description: development files for libnmbs
  This package contains the header files, cmake targets etc.
- to compile external code against libnmbs.
+ to compile external code against libnmbs. Doxygen is also
+ provided using doc-base.

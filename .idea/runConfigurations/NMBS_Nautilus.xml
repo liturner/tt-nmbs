@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="NMBS-Nautilus" type="CMakeRunConfiguration" factoryName="Application" PROGRAM_PARAMS="$PROJECT_DIR$/targets/NMBS-Tests/resources" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="TT-NMBS" TARGET_NAME="NMBS-Nautilus" CONFIG_NAME="debug - debug" RUN_PATH="/bin/nautilus">
+  <configuration default="false" name="NMBS-Nautilus" type="CMakeRunConfiguration" factoryName="Application" PROGRAM_PARAMS="$PROJECT_DIR$/targets/NMBS-Tests/resources" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="NMBS" TARGET_NAME="NMBS-Nautilus" CONFIG_NAME="debug - debug" RUN_PATH="/bin/nautilus">
     <envs>
       <env name="G_MESSAGES_DEBUG" value="NMBS" />
       <env name="GDK_BACKEND" value="x11" />

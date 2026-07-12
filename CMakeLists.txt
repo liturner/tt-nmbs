@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.23)
 project(
-        TT-NMBS
+        NMBS
         LANGUAGES C CXX
         VERSION 1.0.0
 )
@@ -21,6 +21,17 @@ include(GoogleTest)
 include(GNUInstallDirs)
 include(CMakePackageConfigHelpers)
 include(cmake/manpages.cmake)
+include(CheckCXXCompilerFlag)
+
+add_compile_options(
+        -fstack-protector-strong
+        -D_FORTIFY_SOURCE=2
+)
+
+add_link_options(
+        "-Wl,-z,relro"
+        "-Wl,-z,now"
+)
 
 # Versions are between Ubuntu 24.04 (Github agent) and Debian 13 (target system)
 find_package(exiv2 REQUIRED CONFIG)                               # libexiv2-dev (Debian 13: 0.28.5, Ubuntu 24.04: 0.27.6)

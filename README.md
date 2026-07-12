@@ -1,4 +1,4 @@
-# TurnerTech - Normalised Metadata Binding Service (tt-nmbs)
+# Normalised Metadata Binding Service (tt-nmbs)
 
 This project provides a set of tools for use with the NATO Confidentiality Metadata Labels as specified in ADatP-4774 
 and ADatP-4778.
@@ -46,7 +46,10 @@ lintian ../tt-nmbs*.changes
 dch -m
 
 # Finalise the current version in the log
-dch -mr --distribution trixie
+dch -mr
+
+# Verify using lintian. mentors will use pedantic settings!
+lintian --info --pedantic --display-info nmbs_*_amd64.changes
 
 # After finalisation, increment the build version automatically and start the next section
 dch -mi

@@ -14,11 +14,11 @@ Once you have installed _libnmbs-dev_, you will be able to integrate libnmbs1 in
 project as follows:
 
 ```cmake
-find_package(TT-NMBS REQUIRED CONFIG)
+find_package(NMBS REQUIRED CONFIG)
 
 target_link_libraries(Your-Target
         PRIVATE
-        TT-NMBS::NMBS-Library
+        NMBS::NMBS-Library
 )
 ```
 
