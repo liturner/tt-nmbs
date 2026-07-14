@@ -1,11 +1,17 @@
-# Normalised Metadata Binding Service (tt-nmbs)
+# Normalised Metadata Binding Service (nmbs)
 
 This project provides a set of tools for use with the NATO Confidentiality Metadata Labels as specified in ADatP-4774 
 and ADatP-4778.
 
 The project is aimed as a Debian Linux project only. The intention is to produce a set of commands which can be run 
 directly on a system. A Library containing the core functionality will also be produced, enabling other tools to 
-integrate much of the core functionality with ease.
+integrate much of the core functionality with ease. Furthermore, a GNOME Files (Nautilus) extension is provided as the
+primary GUI for the functionality.
+
+# Example Screenshots
+
+![Example Column Integration](https://raw.githubusercontent.com/liturner/nmbs/main/example-screenshots/.github/example-column.png)
+![Example Properties Menu](https://raw.githubusercontent.com/liturner/nmbs/main/example-screenshots/.github/example-properties.png)
 
 # Usage
 
@@ -39,7 +45,7 @@ stable. This is done as follows (assuming current dir is the project root).
 
 ```shell
 dpkg-buildpackage
-lintian ../tt-nmbs*.changes
+lintian ../nmbs*.changes
 
 # To update the changelog use dch. In particular, the commands --append, --increment, --edit, --release and --newversion
 # Note that debhelper decides e.g. if to sign the build based on the status in the changelog. Its an important file!!!
