@@ -10,8 +10,8 @@ primary GUI for the functionality.
 
 # Example Screenshots
 
-![Example Column Integration](https://raw.githubusercontent.com/liturner/nmbs/main/example-screenshots/.github/example-column.png)
-![Example Properties Menu](https://raw.githubusercontent.com/liturner/nmbs/main/example-screenshots/.github/example-properties.png)
+![Example Column Integration](https://raw.githubusercontent.com/liturner/nmbs/main/.github/example-column.png)
+![Example Properties Menu](https://raw.githubusercontent.com/liturner/nmbs/main/.github/example-properties.png)
 
 # Usage
 
