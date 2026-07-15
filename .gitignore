@@ -6,9 +6,11 @@ cmake_test_discovery_*
 # ==========================================
 obj-*-linux-gnu*/
 debian/.debhelper/
+debian/nautilus-nmbs/
 debian/nmbs/
 debian/libnmbs1/
 debian/libnmbs-dev/
+debian/libnmbs-doc/
 debian/tmp/
 debian/debhelper-build-stamp
 debian/files

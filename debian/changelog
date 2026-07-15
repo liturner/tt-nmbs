@@ -1,18 +1,5 @@
 nmbs (1.0.0~1) unstable; urgency=medium
 
-  * Add Partial XML Binding Profile of ADatP-4778.2 Ed.A V.1
-  * Add REST Binding Profile of ADatP-4778.2 Ed.A V.1
-  * Add Sidecar Binding Profile of ADatP-4778.2 Ed.A V.1
-  * Add Xmp Binding Profile of ADatP-4778.2 Ed.A V.1
-  * Add Partial SPIF Support
-  * Add MIME Info for .bdo and .spif extensions
-  * Add C API for use in e.g. Nautilus extensions
-  * Add Nautilus extension to nmbs package
-  * Add libnmbs1 shared library and package
-  * Add libnmbs-dev package
-  * Add nmbs package
-  * Add man pages
-  * Add html pages and doc-base support
   * Initial Release (Closes: #1141958)
 
  -- Luke Ian Turner <turnertech@outlook.de>  Mon, 13 Jul 2026 16:31:31 +0200

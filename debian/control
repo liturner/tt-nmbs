@@ -12,14 +12,25 @@ Homepage: https://github.com/liturner/nmbs
 Package: nmbs
 Architecture: amd64
 Depends: ${shlibs:Depends}, ${misc:Depends}, libnmbs1 (= ${binary:Version})
-Recommends: exiv2
+Recommends: nautilus-nmbs
+Suggests: exiv2
 Description: confidentiality label binding tools
- A set of tools enabling working with ADatP-4774 and ADatP-4778
+ A set of CLI tools enabling working with ADatP-4774 and ADatP-4778
  confidentiality labels, such as the ability to tag Xmp metadata
  into images with security classifications like PUBLIC UNMARKED
  or NATO UNCLASSIFIED.
- CLI tools and a Nautilus extension provide
- both console and GUI capabilities.
+
+
+Package: nautilus-nmbs
+Architecture: amd64
+Depends: ${shlibs:Depends}, ${misc:Depends}, libnmbs1 (= ${binary:Version})
+Recommends: nautilus
+Suggests: nmbs
+Description: nautilus support for confidentiality labels
+ A Nautilus (GNOME Files) extension providing support for working
+ with ADatP-4774 and ADatP-4778 confidentiality labels. Including
+ e.g. the ability to tag Xmp metadata into images with security
+ classifications like PUBLIC UNMARKED or NATO UNCLASSIFIED.
 
 
 Package: libnmbs1
@@ -34,10 +45,21 @@ Description: confidentiality label binding support
 
 Package: libnmbs-dev
 Section: libdevel
-Architecture: any
+Architecture: amd64
 Depends: libnmbs1 (= ${binary:Version}), ${misc:Depends}
-Recommends: dochelp
+Recommends: libnmbs-doc
+Suggests: cmake, libnmbs-doc
 Description: development files for libnmbs
  This package contains the header files, cmake targets etc.
  to compile external code against libnmbs. Doxygen is also
  provided using doc-base.
+
+
+Package: libnmbs-doc
+Section: doc
+Architecture: all
+Depends: ${misc:Depends}
+Suggests: libnmbs-dev, dochelp
+Description: documentation files for libnmbs
+ This package contains the Doxygen API documentation for
+ libnmbs.
