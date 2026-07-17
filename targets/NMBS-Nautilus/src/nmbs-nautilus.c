@@ -80,39 +80,36 @@ static NautilusOperationResult nmbs_properties_update_file_info(
             nautilus_file_info_add_string_attribute(file, nmbs_file_supports_label, "TRUE");
         }
 
-        if (nmbs_binding_flags_has_labels(flags))
+        g_log("NMBS", G_LOG_LEVEL_DEBUG, "Reading Labels for %s", path_str);
+        auto const labels = nmbs_confidentiality_labels_new();
+        nmbs_confidentiality_labels_read_labels_with_known_binding(labels, path_str, flags);
+        g_free(path_str);
+
+        for (unsigned long i = 0; i < nmbs_confidentiality_labels_size(labels); ++i)
         {
-            g_log("NMBS", G_LOG_LEVEL_DEBUG, "Reading Labels for %s", path_str);
-            auto const labels = nmbs_confidentiality_labels_new();
-            nmbs_confidentiality_labels_read_labels_with_known_binding(labels, path_str, flags);
-            g_free(path_str);
+            auto const label = nmbs_confidentiality_labels_get(labels, i);
+            auto const label_policy = nmbs_confidentiality_label_get_policy(label);
+            auto const label_classification = nmbs_confidentiality_label_get_classification(label);
 
-            for (unsigned long i = 0; i < nmbs_confidentiality_labels_size(labels); ++i)
+            if (label == nullptr || !label_policy || !label_classification)
             {
-                auto const label = nmbs_confidentiality_labels_get(labels, i);
-                auto const label_policy = nmbs_confidentiality_label_get_policy(label);
-                auto const label_classification = nmbs_confidentiality_label_get_classification(label);
-
-                if (label == nullptr || !label_policy || !label_classification)
-                {
-                    continue;
-                }
-
-                char* classification = g_strconcat(label_policy, ":", label_classification, NULL);
-                if (!classification)
-                {
-                    g_free(classification);
-                    continue;
-                }
-                nautilus_file_info_add_string_attribute(file, nmbs_column_classification_key, classification);
-                nautilus_file_info_add_string_attribute(file, nmbs_property_policy_key, label_policy);
-                nautilus_file_info_add_string_attribute(file, nmbs_property_classification_key, label_classification);
-                nautilus_file_info_add_string_attribute(file, nmbs_file_has_label, "TRUE");
-
-                g_free(classification);
+                continue;
             }
-            nmbs_confidentiality_labels_delete(labels);
+
+            char* classification = g_strconcat(label_policy, ":", label_classification, NULL);
+            if (!classification)
+            {
+                g_free(classification);
+                continue;
+            }
+            nautilus_file_info_add_string_attribute(file, nmbs_column_classification_key, classification);
+            nautilus_file_info_add_string_attribute(file, nmbs_property_policy_key, label_policy);
+            nautilus_file_info_add_string_attribute(file, nmbs_property_classification_key, label_classification);
+            nautilus_file_info_add_string_attribute(file, nmbs_file_has_label, "TRUE");
+
+            g_free(classification);
         }
+        nmbs_confidentiality_labels_delete(labels);
     }
     return NAUTILUS_OPERATION_COMPLETE;
 }

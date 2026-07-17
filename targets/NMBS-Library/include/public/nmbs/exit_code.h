@@ -29,6 +29,7 @@ namespace nmbs
 {
     /// The possible exit codes which any of the nmbs tools may produce. These may be used in library functions, and as
     /// return values for executables.
+    /// @since 1.0.0
     enum ExitCode {
 
         ///

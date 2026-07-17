@@ -1,5 +1,6 @@
 v1.0.1
 TODO: Refactor constants into respective namespaces
+TODO: Remove presence checks from binding::supports
 
 Debian 14
 TODO: Add Doxygen requirements traceability

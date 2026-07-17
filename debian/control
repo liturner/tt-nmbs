@@ -3,7 +3,7 @@ Section: utils
 Priority: optional
 Maintainer: Luke Ian Turner <turnertech@outlook.de>
 Standards-Version: 4.7.2
-Build-Depends: debhelper-compat (= 13), libexiv2-dev, libargparse-dev, libxml2-dev (>= 2.12.7), libgtest-dev, doxygen, help2man
+Build-Depends: debhelper-compat (= 13), libexiv2-dev, libargparse-dev, libxml2-dev (>= 2.12.7), libgtest-dev, doxygen, help2man, xml-core
 Vcs-Git: https://github.com/liturner/nmbs.git
 Vcs-Browser: https://github.com/liturner/nmbs
 Homepage: https://github.com/liturner/nmbs
@@ -48,7 +48,7 @@ Section: libdevel
 Architecture: amd64
 Depends: libnmbs1 (= ${binary:Version}), ${misc:Depends}
 Recommends: libnmbs-doc
-Suggests: cmake, libnmbs-doc
+Suggests: cmake
 Description: development files for libnmbs
  This package contains the header files, cmake targets etc.
  to compile external code against libnmbs. Doxygen is also

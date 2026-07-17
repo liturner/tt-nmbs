@@ -6,6 +6,8 @@ configure_file(resources/spif/PUBLIC.spif resources/spif/PUBLIC.spif COPYONLY)
 configure_file(resources/xml/test.1.bdo resources/xml/test.1.bdo COPYONLY)
 
 add_executable(NMBS-Tests
+        src/nmbs/binding/access_mode.tests.cpp
+        src/nmbs/binding/support.tests.cpp
         src/nmbs/basic.tests.cpp
         src/nmbs/http.tests.cpp
         src/nmbs/nmbs_c.tests.cpp

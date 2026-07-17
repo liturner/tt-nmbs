@@ -62,7 +62,7 @@ TEST(HTTP, BindingDataContent)
     std::vector<nmbs::ConfidentialityLabel> labels(1);
     labels[0].confidentiality_information.policy_identifier = "PUBLIC";
     labels[0].confidentiality_information.classification = "UNMARKED";
-    const std::string binding_data = nmbs::binding::http::serialise_labels(labels);
+    const std::string binding_data = nmbs::binding::http::serialise_header(labels);
 
     ASSERT_EQ(binding_data.find("urn:nato:stanag:4778:bindinginformation"), 14);
     ASSERT_EQ(binding_data.find("binding-data-object"), 58);
@@ -79,9 +79,9 @@ TEST(HTTP, SerialiseDeserialise)
     std::vector<nmbs::ConfidentialityLabel> labels(1);
     labels[0].confidentiality_information.policy_identifier = "PUBLIC";
     labels[0].confidentiality_information.classification = "UNMARKED";
-    const std::string binding_data = nmbs::binding::http::serialise_labels(labels);
-    const auto deserialised_labels = nmbs::binding::http::deserialise_labels(binding_data);
+    const std::string binding_data = nmbs::binding::http::serialise_header(labels);
+    const auto deserialised_labels = nmbs::binding::http::deserialise_header(binding_data);
 
-    ASSERT_EQ(deserialised_labels.size(), labels.size());
-    ASSERT_EQ(deserialised_labels[0], labels[0]);
+    ASSERT_EQ(deserialised_labels.value().labels.size(), labels.size());
+    ASSERT_EQ(deserialised_labels.value().labels[0], labels[0]);
 }

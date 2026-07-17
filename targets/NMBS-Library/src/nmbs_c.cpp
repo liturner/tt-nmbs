@@ -33,7 +33,6 @@
 
 #include "nmbs/exit_code.h"
 #include "nmbs/nmbs_private.h"
-#include "nmbs/binding.h"
 #include "nmbs/spif.h"
 
 namespace
@@ -70,9 +69,9 @@ namespace
         return reinterpret_cast<nmbs::spif::SecurityPolicy*>(in);
     }
 
-    [[nodiscard]] nmbs::binding::Flags to_cpp_binding_flags(uint32_t in) noexcept
+    [[nodiscard]] nmbs::binding::ProfileSupport to_cpp_binding_flags(uint32_t in) noexcept
     {
-        return static_cast<nmbs::binding::Flags>(in);
+        return static_cast<nmbs::binding::ProfileSupport>(in);
     }
 
     [[nodiscard]] nmbs_security_classifications_ptr to_c_classifications(std::vector<nmbs::spif::SecurityClassification>* in) noexcept
@@ -287,7 +286,7 @@ int nmbs_confidentiality_labels_write_labels(const char* file, const nmbs_confid
     try
     {
         const std::filesystem::path target_path(file);
-        nmbs::binding::Flags cpp_flags = nmbs::binding::support(target_path);
+        nmbs::binding::ProfileSupport cpp_flags = nmbs::binding::support(target_path);
         return static_cast<uint32_t>(cpp_flags);
     }
     catch (const std::exception& e) {
@@ -459,15 +458,11 @@ void nmbs_security_policies_delete(nmbs_security_policies_ptr policies) noexcept
 }
 
 
-bool nmbs_binding_flags_has_labels(const uint32_t flags) noexcept
-{
-    return nmbs::binding::has_labels(to_cpp_binding_flags(flags));
-}
-
 bool nmbs_binding_flags_supports_labels(const uint32_t flags) noexcept
 {
     return nmbs::binding::supports_labels(to_cpp_binding_flags(flags));
 }
+
 
 void nmbs_cleanup() noexcept
 {

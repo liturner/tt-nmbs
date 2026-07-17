@@ -43,7 +43,7 @@ namespace nmbs
     ///
     /// The constructors are private, and the produced instances are immutable with only const accessors being provided.
     /// Copy constructors, including move support are provided.
-    ///
+    /// @since 1.0.0
     /// @see nmbs::error::message
     /// @see nmbs::error::code
     class Error
@@ -111,7 +111,7 @@ namespace nmbs
     };
 
     /// @brief Convenience typedef to standardise usage of nmbs::error in all std::expected usages.
-    ///
+    /// @since 1.0.0
     template <typename T>
     using Expected = std::expected<T, Error>;
 }

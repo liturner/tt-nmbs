@@ -78,14 +78,14 @@ TEST(XML, Namespaces)
 {
     /// This value may never change. You may refactor the variable name, or add another namespace in a different
     /// variable, but the namespace itself may never be modified. It is defined by the standard ADatP-4774 Ed.A V.1.
-    ASSERT_EQ(nmbs::constants::s4774_namespace, "urn:nato:stanag:4774:confidentialitymetadatalabel:1:0");
+    ASSERT_EQ(nmbs::binding::s4774_namespace, "urn:nato:stanag:4774:confidentialitymetadatalabel:1:0");
 }
 
 TEST(XML, DeserialiseSingleLabel)
 {
     NMBS_REQUIREMENT_STANDARD_4778_2_A1
 
-    const nmbs::binding::BindingInformation bdo = nmbs::xml::deserialise_binding_information(binding_information_1).value();
+    const nmbs::binding::BindingInformation bdo = nmbs::serialisation::deserialise_binding_information(binding_information_1).value();
 
     // 2026-06-26T12:47:51Z
     constexpr std::chrono::utc_seconds expected_utc_time{std::chrono::seconds{1782478098}};
@@ -102,7 +102,7 @@ TEST(XML, DeserialiseSingleLabelFile)
 {
     NMBS_REQUIREMENT_STANDARD_4778_2_A1
 
-    const nmbs::binding::BindingInformation bdo = nmbs::xml::deserialise_binding_information_from_file(std::filesystem::path("resources/xml/test.1.bdo")).value().value();
+    const nmbs::binding::BindingInformation bdo = nmbs::serialisation::deserialise_binding_information_from_file(std::filesystem::path("resources/xml/test.1.bdo")).value().value();
 
     // 2026-06-26T12:47:51Z
     constexpr std::chrono::utc_seconds expected_utc_time{std::chrono::seconds{1782478098}};
@@ -119,7 +119,7 @@ TEST(XML, DeserialiseDualLabel)
 {
     NMBS_REQUIREMENT_STANDARD_4778_2_A1
 
-    const nmbs::binding::BindingInformation bdo = nmbs::xml::deserialise_binding_information(binding_information_2).value();
+    const nmbs::binding::BindingInformation bdo = nmbs::serialisation::deserialise_binding_information(binding_information_2).value();
 
     // 2026-06-26T12:47:51Z
     constexpr std::chrono::utc_seconds expected_utc_time{std::chrono::seconds{1782478098}};

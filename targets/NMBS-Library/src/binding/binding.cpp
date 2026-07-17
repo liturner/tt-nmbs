@@ -1,8 +1,9 @@
-/// @file basic.tests.cpp
-/// @brief Misc tests
+/// @file binding.cpp
+/// @brief binding.cpp brief
+/// @details binding.cpp details
 ///
-/// @author Luke Ian Turner
-/// @date 2026-06-10
+/// @author luke
+/// @date 2026-07-18
 /// @copyright Copyright (c) 2026 Luke Ian Turner
 /// @copyright
 /// Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -23,23 +24,48 @@
 /// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 /// SOFTWARE.
 
-#include <nmbs/test.h>
+#include "nmbs/nmbs_private.h"
 
-TEST(XMP, Read)
-{
-    const auto labels = nmbs::read_labels("resources/test-public-unmarked.jpg", std::nullopt).value();
-    ASSERT_EQ(labels.size(), 1);
-    ASSERT_EQ(labels[0].label_type, nmbs::ConfidentialityLabel::originator);
-    ASSERT_EQ(labels[0].confidentiality_information.policy_identifier, "PUBLIC");
-    ASSERT_EQ(labels[0].confidentiality_information.classification, "UNMARKED");
-    nmbs::cleanup();
-}
+#include <unistd.h>
 
-TEST(Sidecar, Write)
+namespace nmbs::binding
 {
-    std::vector<nmbs::ConfidentialityLabel> labels(1);
-    labels[0].confidentiality_information.policy_identifier = "PUBLIC";
-    labels[0].confidentiality_information.classification = "UNMARKED";
-    auto response = nmbs::binding::sidecar::write("resources/test-no-xmp.jpg", labels);
-    ASSERT_NE(response, "");
+    [[nodiscard]] AccessMode access_mode_filesystem(const std::filesystem::path& path)
+    {
+        AccessMode result_flags = am_none;
+        if (::access(path.c_str(), R_OK) == 0) result_flags |= am_read;
+        if (::access(path.c_str(), W_OK) == 0) result_flags |= am_write;
+        return result_flags;
+    }
+
+    ProfileSupport support(const std::filesystem::path& path)
+    {
+        if (!std::filesystem::exists(path)) [[unlikely]]
+        {
+            return ps_none;
+        }
+
+        if (!std::filesystem::is_regular_file(path))
+        {
+            return ps_none;
+        }
+
+        ProfileSupport result_flags = ps_none;
+
+        if (sidecar::supported(path))
+        {
+            result_flags |= ps_sidecar;
+        }
+        if (xmp::supported(path))
+        {
+            result_flags |= ps_xmp;
+        }
+        if (xml::supported(path))
+        {
+            result_flags |= ps_xml;
+        }
+
+        return result_flags;
+    }
+
 }

@@ -39,44 +39,45 @@ namespace nmbs
     ///
     /// Noteworthy is that the label couples "confidentiality information" with a timestamp and
     /// additional metadata such as the user and review dates.
-    ///
+    /// @since 1.0.0
     /// @see nmbs::confidentiality_information_type
     struct ConfidentialityLabel
     {
-        ///
         /// @brief identifier for the specialisation of the label.
         /// @details There is no <s4774::ConfidentialityLabel> in the standard, but all specialisations
         /// share the exact same values. The specialisation is used in validation steps with logic for
         /// deciding which classification applies.
+        /// @since 1.0.0
         enum ConfidentialityLabelType
         {
-            ///
             /// @brief <s4774::originatorConfidentialityLabel>
+            /// @since 1.0.0
             originator,
 
-            ///
             /// @brief <s4774::alternativeConfidentialityLabel>
+            /// @since 1.0.0
             alternative,
 
-            ///
             /// @brief <s4774::successorConfidentialityLabel>
+            /// @since 1.0.0
             successor
         };
 
         /// @brief A core element of the nmbs::confidentiality_label containing the classification (e.g. PUBLIC UNMARKED)
         /// @details This struct represents <s4774::ConfidentialityInformation>.
+        /// @since 1.0.0
         struct ConfidentialityInformation
         {
-            ///
             /// @brief <s4774::PolicyIdentifier>
+            /// @since 1.0.0
             std::string policy_identifier;
 
-            ///
             /// @brief <s4774::Classification>
+            /// @since 1.0.0
             std::string classification;
 
-            ///
             /// @brief <s4774::PrivacyMark>
+            /// @since 1.0.0
             std::optional<std::string> privacy_mark;
 
             bool operator==(const ConfidentialityInformation&) const = default;

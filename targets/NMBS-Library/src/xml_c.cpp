@@ -37,8 +37,6 @@
 #include <cstring>
 #include <string>
 
-#include "nmbs/binding.h"
-#include "nmbs/constants.h"
 #include "nmbs/expected.h"
 
 namespace
@@ -233,7 +231,7 @@ namespace
 
 }
 
-namespace nmbs::xml
+namespace nmbs::serialisation
 {
     void cleanup()
     {
@@ -296,8 +294,40 @@ namespace nmbs::xml
         return out;
     }
 
+    Expected<std::optional<std::string>> read_binding_information_xml_from_file(const std::filesystem::path& file)
+    {
+        if (!std::filesystem::is_regular_file(file))
+        {
+            return std::unexpected(Error::file_not_found());
+        }
+        LIBXML_TEST_VERSION
+
+        const std::unique_ptr<xmlTextReader, XmlTextReaderDeleter> reader(xmlReaderForFile(file.c_str(), nullptr, 0));
+        while (xmlTextReaderRead(reader.get()))
+        {
+            // Check only name for now. Its very unlikely to hit, so we should optimise as much as possible till
+            // here
+            if (xmlTextReaderNodeType(reader.get()) == XML_READER_TYPE_ELEMENT &&
+                xmlStrEqual(reinterpret_cast<const xmlChar*>("BindingInformation"), xmlTextReaderConstLocalName(reader.get()))) [[unlikely]]
+            {
+                if (xmlStrEqual(target_namespace_4778, xmlTextReaderConstNamespaceUri(reader.get()))) [[likely]]
+                {
+                    const std::unique_ptr<xmlChar, XmlCharDeleter> outer_xml(xmlTextReaderReadOuterXml(reader.get()));
+                    if (!outer_xml)
+                    {
+                        return std::unexpected(Error::xml_could_not_parse("Found an s4778:BindingInformation, but could not read it."));
+                    }
+                    return std::string(reinterpret_cast<char*>(outer_xml.get()));
+                }
+                std::cerr << "Warning: During xml Parsing an element BindingInformation was found, but was not using the namespace urn:nato:stanag:4778:bindinginformation:1:0. This element will be ignored by libnmbs as it may belong to another application." << std::endl;
+            }
+        }
+        return std::nullopt;
+    }
+
+
     // Will just try to get the binding information from an XML file. Should be irrelevant if a bdo or in some embedded file.
-    [[nodiscard]] Expected<std::optional<binding::BindingInformation>> deserialise_binding_information_from_file(const std::filesystem::path& file)
+    Expected<std::optional<binding::BindingInformation>> deserialise_binding_information_from_file(const std::filesystem::path& file)
     {
         if (!std::filesystem::is_regular_file(file))
         {
@@ -370,8 +400,8 @@ namespace nmbs::xml
         // Here we go to string as the string_view handles null termination differently. The tiny overhead is not a
         // concern!
         // ReSharper disable CppVariableCanBeMadeConstexpr
-        const std::string spif_prefix(nmbs::constants::spif_prefix);
-        const std::string spif_namespace(nmbs::constants::spif_namespace);
+        const std::string spif_prefix(spif::spif_prefix);
+        const std::string spif_namespace(spif::spif_namespace);
         // ReSharper restore CppVariableCanBeMadeConstexpr
 
         xmlXPathRegisterNs(xpath_ctx.get(), reinterpret_cast<const xmlChar*>(spif_prefix.c_str()),
@@ -446,9 +476,9 @@ namespace nmbs::xml
     {
         std::string xml;
         xml.reserve(1024);
-        xml.append(std::format(R"(<{0}:BindingInformation xmlns:{0}="{1}"><{0}:MetadataBindingContainer><{0}:MetadataBinding><{0}:Metadata>{2}</{0}:Metadata>)", constants::s4778_prefix, constants::s4778_namespace, serialise_confidentiality_labels(binding_information.labels)));
-        xml.append(std::format(R"(<{0}:DataReference URI="{1}" />)", constants::s4778_prefix, binding_information.reference.uri));
-        xml.append(std::format(R"(</{0}:MetadataBinding></{0}:MetadataBindingContainer></{0}:BindingInformation>)", constants::s4778_prefix));
+        xml.append(std::format(R"(<{0}:BindingInformation xmlns:{0}="{1}"><{0}:MetadataBindingContainer><{0}:MetadataBinding><{0}:Metadata>{2}</{0}:Metadata>)", binding::s4778_prefix, binding::s4778_namespace, serialise_confidentiality_labels(binding_information.labels)));
+        xml.append(std::format(R"(<{0}:DataReference URI="{1}" />)", binding::s4778_prefix, binding_information.reference.uri));
+        xml.append(std::format(R"(</{0}:MetadataBinding></{0}:MetadataBindingContainer></{0}:BindingInformation>)", binding::s4778_prefix));
         return xml;
     }
 
@@ -468,15 +498,15 @@ namespace nmbs::xml
 
         std::string xml;
         xml.reserve(1024);
-        xml.append(std::format(R"(<{0}:originatorConfidentialityLabel xmlns:{0}="{1}"><{0}:ConfidentialityInformation>)", constants::s4774_prefix, constants::s4774_namespace));
-        xml.append(std::format("<{0}:PolicyIdentifier>{1}</{0}:PolicyIdentifier>", constants::s4774_prefix, confidentiality_label.confidentiality_information.policy_identifier));
-        xml.append(std::format("<{0}:Classification>{1}</{0}:Classification></{0}:ConfidentialityInformation>", constants::s4774_prefix, confidentiality_label.confidentiality_information.classification));
+        xml.append(std::format(R"(<{0}:originatorConfidentialityLabel xmlns:{0}="{1}"><{0}:ConfidentialityInformation>)", binding::s4774_prefix, binding::s4774_namespace));
+        xml.append(std::format("<{0}:PolicyIdentifier>{1}</{0}:PolicyIdentifier>", binding::s4774_prefix, confidentiality_label.confidentiality_information.policy_identifier));
+        xml.append(std::format("<{0}:Classification>{1}</{0}:Classification></{0}:ConfidentialityInformation>", binding::s4774_prefix, confidentiality_label.confidentiality_information.classification));
         if (confidentiality_label.originator_id.has_value())
         {
-            xml.append(std::format(R"(<{0}:OriginatorID IDType="{1}">{2}</{0}:OriginatorID>)", constants::s4774_prefix, confidentiality_label.originator_id.value().id_type, confidentiality_label.originator_id.value().value));
+            xml.append(std::format(R"(<{0}:OriginatorID IDType="{1}">{2}</{0}:OriginatorID>)", binding::s4774_prefix, confidentiality_label.originator_id.value().id_type, confidentiality_label.originator_id.value().value));
         }
-        xml.append(std::format("<{0}:CreationDateTime>{1}</{0}:CreationDateTime>", constants::s4774_prefix, creation_time_string));
-        xml.append(std::format("</{0}:originatorConfidentialityLabel>", constants::s4774_prefix));
+        xml.append(std::format("<{0}:CreationDateTime>{1}</{0}:CreationDateTime>", binding::s4774_prefix, creation_time_string));
+        xml.append(std::format("</{0}:originatorConfidentialityLabel>", binding::s4774_prefix));
         return xml;
     }
 

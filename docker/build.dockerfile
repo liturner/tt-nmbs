@@ -2,16 +2,18 @@ ARG DEBIAN_RELEASE=forky
 FROM debian:${DEBIAN_RELEASE} AS nmbs-build
 
 RUN apt-get update && apt-get install --no-install-recommends --yes \
-    build-essential cmake debhelper help2man libgtest-dev doxygen libargparse-dev libexiv2-dev libxml2-dev pkg-config libglib2.0-dev libnautilus-extension-dev
+    build-essential cmake debhelper help2man libgtest-dev doxygen libargparse-dev libexiv2-dev libxml2-dev pkg-config libglib2.0-dev libnautilus-extension-dev xml-core && \
+    useradd -ms /bin/bash nmbs
 
-WORKDIR /usr/src/nmbs/src
-COPY . .
+USER nmbs
+WORKDIR /home/nmbs/src/nmbs
+COPY --chown=nmbs:nmbs . .
 
 RUN dpkg-buildpackage
 
 
 FROM debian:trixie AS nmbs-trixie
-RUN --mount=type=bind,from=nmbs-build,source=/usr/src/nmbs,target=/tmp/nmbs \
+RUN --mount=type=bind,from=nmbs-build,source=/home/nmbs/src,target=/tmp/nmbs \
     apt-get update &&  \
     apt-get install --no-install-recommends --yes /tmp/nmbs/libnmbs1_1*.deb /tmp/nmbs/nmbs_1*.deb &&  \
     rm -rf /var/lib/apt/lists/* && \

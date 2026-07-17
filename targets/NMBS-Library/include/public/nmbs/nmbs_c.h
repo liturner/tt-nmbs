@@ -127,12 +127,6 @@ typedef struct nmbs_security_policy* nmbs_security_policy_ptr;
 /// @ingroup c_bindings
 /// @param flags
 /// @return
-[[nodiscard]] bool nmbs_binding_flags_has_labels(uint32_t flags) NMBS_NOEXCEPT;
-
-/// @brief
-/// @ingroup c_bindings
-/// @param flags
-/// @return
 [[nodiscard]] bool nmbs_binding_flags_supports_labels(uint32_t flags) NMBS_NOEXCEPT;
 
 /// @brief

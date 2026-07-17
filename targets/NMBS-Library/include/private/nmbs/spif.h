@@ -34,6 +34,10 @@
 
 namespace nmbs::spif
 {
+    inline constexpr std::string_view spif_namespace = "http://www.xmlspif.org/spif";
+
+    inline constexpr std::string_view spif_prefix = "spif";
+
     ///
     /// @brief Location of the spif files sent with the package manager.
     inline const std::filesystem::path packaged_spif_location = "/usr/share/xml/nmbs/spif";

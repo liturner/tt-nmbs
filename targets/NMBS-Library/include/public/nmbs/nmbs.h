@@ -30,6 +30,7 @@
 #include <string>
 #include <filesystem>
 
+#include "binding.h"
 #include "confidentiality_label.h"
 #include "expected.h"
 
@@ -63,28 +64,42 @@ namespace nmbs
 
     /// @brief Writes ADatP‑4778 binding information using the best possible binding profile.
     /// @details Embedded is preferred over Sidecar, and the presence of a Sidecar is ignored if embedding is possible.
-    /// Furthermore, existing data will be overridden.
+    /// Furthermore, existing data will be overridden. You can attempt to force a specific profile by passing the flag
+    /// in to the binding_support parameter. Check the return parameter for errors to see if it succeeded.
     /// @param path to the image file to label.
-    /// @param confidentiality_labels collection of labels to write to the file
+    /// @param confidentiality_labels collection of labels to write to the file.
+    /// @param binding_support flags if already known. The presence of this parameter will save CPU cycles in
+    /// determining the available binding method for the file. Use manually, or via nmbs::binding::support.
     /// @return The labels written to the file in XML form. If the nmbs::Expected does not have a value, then there was an error.
     /// @since 1.0.0
-    [[nodiscard]] Expected<std::string> write_labels(const std::filesystem::path& path, const std::vector<ConfidentialityLabel>& confidentiality_labels);
+    [[nodiscard]] Expected<std::string> write_labels(
+        const std::filesystem::path& path,
+        const std::vector<ConfidentialityLabel>& confidentiality_labels,
+        std::optional<binding::ProfileSupport> binding_support = std::nullopt);
 
     /// @brief Reads the ADatP-4774 labels from the file
     /// @details and returns them in a deserialised form. The deserialization is quite tolerant, and will favour
     /// returning incomplete data, rather than erroring out. This design choice is to ensure interoperability with other
     /// less strict implementations.
     /// @param path to the file
+    /// @param binding_support flags if already known. The presence of this parameter will save CPU cycles in
+    /// determining the available binding method for the file. Use manually, or via nmbs::binding::support.
     /// @return a collection of all labels applied to the file
     /// @see nmbs::write_labels
     /// @since 1.0.0
-    [[nodiscard]] Expected<std::vector<ConfidentialityLabel>> read_labels(const std::filesystem::path& path);
+    [[nodiscard]] Expected<std::vector<ConfidentialityLabel>> read_labels(
+        const std::filesystem::path& path,
+        std::optional<binding::ProfileSupport> binding_support = std::nullopt);
 
     /// @brief Reads the full ADatP-4778 binding from the file.
     /// @details Returns the full XML packet in its raw XML form.
     /// @param path to the file
+    /// @param binding_support flags if already known. The presence of this parameter will save CPU cycles in
+    /// determining the available binding method for the file. Use manually, or via nmbs::binding::support.
     /// @return the raw XML of the stored binding.
     /// @since 1.0.0
-    [[nodiscard]] Expected<std::string> read_binding_xml(const std::filesystem::path& path);
+    [[nodiscard]] Expected<std::string> read_binding_xml(
+        const std::filesystem::path& path,
+        std::optional<binding::ProfileSupport> binding_support = std::nullopt);
 
 }

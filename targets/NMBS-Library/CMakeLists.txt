@@ -8,16 +8,20 @@ target_sources(NMBS-Library
         TYPE HEADERS
         BASE_DIRS include/public
         FILES
+        include/public/nmbs/binding.h
         include/public/nmbs/confidentiality_label.h
         include/public/nmbs/exit_code.h
         include/public/nmbs/expected.h
         include/public/nmbs/nmbs.h
         include/public/nmbs/nmbs_c.h
         PRIVATE
-        include/private/nmbs/binding.h
-        include/private/nmbs/constants.h
-        include/private/nmbs/spif.h
         include/private/nmbs/nmbs_private.h
+        include/private/nmbs/spif.h
+        src/binding/binding.cpp
+        src/binding/http.cpp
+        src/binding/sidecar.cpp
+        src/binding/xml.cpp
+        src/binding/xmp.cpp
         src/nmbs_c.cpp
         src/xml_c.cpp
         src/nmbs.cpp

@@ -28,8 +28,6 @@
 #include <gtest/gtest.h>
 
 #include "nmbs/nmbs.h"
-#include "nmbs/binding.h"
-#include "nmbs/constants.h"
 #include "nmbs/nmbs_private.h"
 
 #include "nmbs/nmbs_c.h"
