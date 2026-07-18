@@ -20,8 +20,8 @@ include(CPack)
 include(GoogleTest)
 include(GNUInstallDirs)
 include(CMakePackageConfigHelpers)
-include(cmake/manpages.cmake)
 include(CheckCXXCompilerFlag)
+include(cmake/manpages.cmake)
 
 add_compile_options(
         -fstack-protector-strong
@@ -40,6 +40,7 @@ find_package(GTest "1.14.0...1.17.0" REQUIRED CONFIG)             # libgtest-dev
 find_package(Doxygen "1.9.8" OPTIONAL_COMPONENTS dot mscgen dia)  # doxygen
 find_package(LibXml2 "2.9.14" REQUIRED)                           # libxml2-dev
 find_package(PkgConfig REQUIRED)                                  # pkg-config
+find_package(Gettext REQUIRED)
 
 pkg_check_modules(GLIB REQUIRED glib-2.0)                         # libglib2.0-dev
 pkg_check_modules(NAUTILUS REQUIRED libnautilus-extension-4)      # libnautilus-extension-dev

@@ -1,2 +1,3 @@
 usr/lib/*/libnmbs.so.[1-9]*
 usr/share/xml/*
+usr/share/locale/*

@@ -2,9 +2,11 @@ add_subdirectory(NMBS-Library)
 add_subdirectory(NMBS-Verify)
 add_subdirectory(NMBS-Set)
 add_subdirectory(NMBS-Nautilus)
+add_subdirectory(NMBS-i18n)
 add_subdirectory(NMBS-Tests)
 
 add_dependencies(NMBS-Library doxygen)
+add_dependencies(NMBS-Library NMBS-i18n)
 
 #
 # *Targets.cmake and *Config.cmake

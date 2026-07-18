@@ -67,6 +67,17 @@ dh clean
 Finally, this is a CLion project. The project settings include a "dpkg" target, and just using the GUI will work for
 the CMake Targets.
 
+# Localising
+
+The project uses gettext for localisation. Please either update the .po
+files in the NMBS-i18n target, or generate a new locale using the following
+command. Note that the CMake is fully automated. All .po files in the po 
+folder will be automatically built and updated.
+
+```bash
+msginit --locale=de.UTF-8 --input=targets/NMBS-i18n/nmbs.pot --output=targets/NMBS-i18n/po/de.po
+```
+
 # Standards
 
 - ADatP-4774 (Ed.A V.1 12.2017) CONFIDENTIALITY METADATA LABEL SYNTAX

@@ -12,6 +12,8 @@
       <w>dockerignore</w>
       <w>doxygen</w>
       <w>fsanitize</w>
+      <w>gfmt</w>
+      <w>gmerge</w>
       <w>installxmlcatalogs</w>
       <w>lacv</w>
       <w>libargparse</w>
@@ -20,6 +22,7 @@
       <w>libgtest</w>
       <w>libnmbs</w>
       <w>lintian</w>
+      <w>locpath</w>
       <w>mainpage</w>
       <w>manpages</w>
       <w>mbxmp</w>
@@ -30,6 +33,7 @@
       <w>stanag</w>
       <w>strdup</w>
       <w>turnertech</w>
+      <w>xgettext</w>
       <w>xmime</w>
       <w>xmlcore</w>
       <w>xmllib</w>

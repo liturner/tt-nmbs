@@ -3,6 +3,8 @@
     <envs>
       <env name="G_MESSAGES_DEBUG" value="NMBS" />
       <env name="GDK_BACKEND" value="x11" />
+      <env name="LANG" value="de_DE.UTF-8" />
+      <env name="NMBS_LOCPATH" value="$PROJECT_DIR$/build/debug/targets/NMBS-i18n/locale" />
     </envs>
     <method v="2">
       <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />

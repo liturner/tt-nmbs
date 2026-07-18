@@ -1,6 +1,31 @@
+/// @file nmbs-nautilus.c
+/// @brief Primary compilation unit for the NMBS-Nautilus
+///
+/// @author Luke Ian Turner
+/// @date 2026-07-19
+/// @copyright Copyright (c) 2026 Luke Ian Turner
+/// @copyright
+/// Permission is hereby granted, free of charge, to any person obtaining a copy
+/// of this software and associated documentation files (the "Software"), to deal
+/// in the Software without restriction, including without limitation the rights
+/// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+/// copies of the Software, and to permit persons to whom the Software is
+/// furnished to do so, subject to the following conditions:
+/// @copyright
+/// The above copyright notice and this permission notice shall be included in all
+/// copies or substantial portions of the Software.
+/// @copyright
+/// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+/// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+/// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+/// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+/// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+/// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+/// SOFTWARE.
+
 #include <nautilus-extension.h>
 #include <glib-object.h>
-
+#include <libintl.h>
 #include <nmbs/nmbs_c.h>
 
 G_DECLARE_FINAL_TYPE(NmbsProperties, nmbs_properties, NMBS, PROPERTIES, GObject)
@@ -9,7 +34,6 @@ struct _NmbsProperties
 {
     GObject parent_instance;
 };
-
 
 static void nmbs_properties_column_provider_iface_init(NautilusColumnProviderInterface* iface);
 static void nmbs_properties_info_provider_iface_init(NautilusInfoProviderInterface* iface);
@@ -121,7 +145,7 @@ static GList* nmbs_properties_get_columns(NautilusColumnProvider*)
     NautilusColumn* column = nautilus_column_new(
         "NmbsProperties::classification",
         nmbs_column_classification_key,
-        "Classification",
+        gettext("Classification"),
         "Displays ADatP-4774 classification metadata"
     );
 
@@ -372,13 +396,19 @@ static void nmbs_properties_model_provider_iface_init(NautilusPropertiesModelPro
 void nautilus_module_initialize(GTypeModule* module)
 {
     g_log("NMBS", G_LOG_LEVEL_DEBUG, "nautilus_module_initialize");
+    g_log("NMBS", G_LOG_LEVEL_DEBUG, "LANG: %s", getenv("LANG"));
+    g_log("NMBS", G_LOG_LEVEL_DEBUG, "NMBS_LOCPATH: %s", getenv("NMBS_LOCPATH"));
+
     nmbs_properties_register_type(module);
+
+    g_log("NMBS", G_LOG_LEVEL_DEBUG, "bindtextdomain: %s", bindtextdomain("nmbs", getenv("NMBS_LOCPATH")));
+    g_log("NMBS", G_LOG_LEVEL_DEBUG, "textdomain: %s", textdomain("nmbs"));
 }
 
 void nautilus_module_shutdown(void)
 {
     g_log("NMBS", G_LOG_LEVEL_DEBUG, "nautilus_module_shutdown");
-    // Free memory if necessary
+    nmbs_cleanup();
 }
 
 void nautilus_module_list_types(const GType** types, int* num_types)
