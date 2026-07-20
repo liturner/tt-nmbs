@@ -33,3 +33,21 @@ msgstr ""
 
 msgid "Classification"
 msgstr "Einstufung"
+
+msgid "Policy Identifier"
+msgstr "Richtliniekennung"
+
+msgid "Clear Classification"
+msgstr "Einstufung entfernen"
+
+msgid "Classify"
+msgstr "Einstufen"
+
+msgid "Classified On"
+msgstr "Eingestufed am"
+
+msgid "Classified By"
+msgstr "Eingestufed von"
+
+msgid "Binding Profile"
+msgstr ""

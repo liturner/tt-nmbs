@@ -32,3 +32,21 @@ msgstr ""
 
 msgid "Classification"
 msgstr ""
+
+msgid "Policy Identifier"
+msgstr ""
+
+msgid "Clear Classification"
+msgstr ""
+
+msgid "Classify"
+msgstr ""
+
+msgid "Classified On"
+msgstr ""
+
+msgid "Classified By"
+msgstr ""
+
+msgid "Binding Profile"
+msgstr ""

@@ -120,7 +120,7 @@ static NautilusOperationResult nmbs_properties_update_file_info(
                 continue;
             }
 
-            char* classification = g_strconcat(label_policy, ":", label_classification, NULL);
+            char* classification = g_strconcat(label_policy, " ", label_classification, NULL);
             if (!classification)
             {
                 g_free(classification);
@@ -198,6 +198,34 @@ static void on_classify_item_activated(NautilusMenuItem* menu_item, gpointer use
     nmbs_confidentiality_labels_delete(labels);
 }
 
+static void on_clear_classification_item_activated(NautilusMenuItem* menu_item, gpointer user_data)
+{
+    GList* files = user_data;
+    for (GList* l = files; l != NULL; l = l->next)
+    {
+        NautilusFileInfo* file = NAUTILUS_FILE_INFO(l->data);
+        const auto location = nautilus_file_info_get_location(file);
+        if (location == NULL)
+        {
+            continue;
+        }
+        char* path_str = g_file_get_path(location);
+        g_object_unref(location);
+
+        const int return_code = -1;//nmbs_confidentiality_labels_clear_labels(path_str);
+        if (return_code == 0)
+        {
+            g_log("NMBS", G_LOG_LEVEL_MESSAGE, "Cleared Classification from %s", path_str);
+        }
+        else
+        {
+            g_log("NMBS", G_LOG_LEVEL_CRITICAL, "Failed to clear Classification on %s. Error code: %d", path_str, return_code);
+        }
+
+        g_free(path_str);
+    }
+}
+
 /// This little guy just exists as the normal use throws warnings. The glib API was a little dirty
 /// so we wrap it cleanly.
 /// @param src
@@ -234,14 +262,16 @@ static GList* nmbs_properties_get_file_items(
         return nullptr;
     }
 
+    GList* items = nullptr;
+
     NautilusMenuItem* menu_root_item = nautilus_menu_item_new(
         "NMBS:Menu:Root",
-        "Classify",
+        gettext("Classify"),
         "Tag this file with ADatP-4774 classification metadata",
         nullptr
     );
 
-    auto policies = nmbs_security_policies_new();
+    const auto policies = nmbs_security_policies_new();
     nmbs_security_policies_read_installed(policies);
     NautilusMenu* policy_submenu = nautilus_menu_new();
 
@@ -290,9 +320,30 @@ static GList* nmbs_properties_get_file_items(
     }
     nautilus_menu_item_set_submenu(menu_root_item, policy_submenu);
     nmbs_security_policies_delete(policies);
-
-    GList* items = nullptr;
     items = g_list_append(items, menu_root_item);
+
+    //
+    // Clear Classification Button
+    //
+    if (nmbs_get_file_info_bool_attribute(file, nmbs_file_has_label))
+    {
+        NautilusMenuItem* clear_classification_button = nautilus_menu_item_new(
+            "NMBS:Menu:Policy",
+            gettext("Clear Classification"),
+            "Tag this file with ADatP-4774 classification metadata",
+            nullptr
+        );
+        g_signal_connect_data(
+            clear_classification_button,
+            "activate",
+            G_CALLBACK(on_clear_classification_item_activated),
+            g_list_copy_deep(files, ref_count_increment, NULL),
+            ref_count_decrement,
+            G_CONNECT_DEFAULT
+        );
+        items = g_list_append(items, clear_classification_button);
+    }
+
     return items;
 }
 
@@ -323,16 +374,25 @@ static GList* nmbs_properties_get_models(NautilusPropertiesModelProvider*, GList
     }
 
     GListStore* model_properties = g_list_store_new(NAUTILUS_TYPE_PROPERTIES_ITEM);
-    NautilusPropertiesItem* policy_property = nautilus_properties_item_new("Policy Identifier", policy_identifier);
-    NautilusPropertiesItem* classification_property = nautilus_properties_item_new("Classification", classification);
+    NautilusPropertiesItem* policy_property = nautilus_properties_item_new(gettext("Policy Identifier"), policy_identifier);
+    NautilusPropertiesItem* classification_property = nautilus_properties_item_new(gettext("Classification"), classification);
+    NautilusPropertiesItem* creation_time_property = nautilus_properties_item_new(gettext("Classified On"), "");
+    NautilusPropertiesItem* originator_property = nautilus_properties_item_new(gettext("Classified By"), "");
+    NautilusPropertiesItem* binding_property = nautilus_properties_item_new(gettext("Binding Profile"), ""); // TODO: The full URN here! Including version
 
     g_list_store_append(model_properties, policy_property);
     g_list_store_append(model_properties, classification_property);
+    g_list_store_append(model_properties, creation_time_property);
+    g_list_store_append(model_properties, originator_property);
+    g_list_store_append(model_properties, binding_property);
 
     g_object_unref(policy_property);
     g_object_unref(classification_property);
+    g_object_unref(creation_time_property);
+    g_object_unref(originator_property);
+    g_object_unref(binding_property);
 
-    NautilusPropertiesModel* classification_model = nautilus_properties_model_new("Classification", G_LIST_MODEL(model_properties));
+    NautilusPropertiesModel* classification_model = nautilus_properties_model_new(gettext("Classification"), G_LIST_MODEL(model_properties));
     g_object_unref(model_properties);
 
     items = g_list_append(items, classification_model);

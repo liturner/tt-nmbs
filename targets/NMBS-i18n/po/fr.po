@@ -32,4 +32,22 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
 msgid "Classification"
+msgstr "Classification"
+
+msgid "Policy Identifier"
+msgstr "Identifiant de politique"
+
+msgid "Clear Classification"
+msgstr "Effacer la classification"
+
+msgid "Classify"
+msgstr "Classifier"
+
+msgid "Classified On"
+msgstr "Classifié le"
+
+msgid "Classified By"
+msgstr "Classifié par"
+
+msgid "Binding Profile"
 msgstr ""

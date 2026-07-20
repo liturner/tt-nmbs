@@ -67,6 +67,23 @@ dh clean
 Finally, this is a CLion project. The project settings include a "dpkg" target, and just using the GUI will work for
 the CMake Targets.
 
+# Runtime Environment Variables
+
+
+
+| Variable        |                                                                                                      | Example                  |
+|-----------------|------------------------------------------------------------------------------------------------------|--------------------------| 
+| NMBS_LOCPATH    | An override path to localisation files. No trailing slash.                                           | /usr/share/locale        |
+
+# DConf Variables
+
+/org/gnome/nautilus-nmbs/
+    originator - Used in nautilus-nmbs. This will take precedence over the env var in Nautilus and counts as user input (its passed by parameter to the lib, so technically it is...)
+    binding-profiles/ - Profiles used for writing. 
+        sidecar
+        ext4
+        xmp
+
 # Localising
 
 The project uses gettext for localisation. Please either update the .po
