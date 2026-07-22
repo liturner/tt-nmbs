@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE schemalist SYSTEM "/usr/share/glib-2.0/schemas/gschema.dtd">
+<schemalist gettext-domain="nmbs">
+    <schema id="org.gnome.nautilus-nmbs">
+        <key name="originator-id" type="s">
+            <default>''</default>
+            <summary>Originator RFC822 Name</summary>
+            <description>
+                Value to use for the Originator ID of labels created by the user. Must be in the RFC822 format. e.g. user@domain.org
+            </description>
+        </key>
+    </schema>
+</schemalist>

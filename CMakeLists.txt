@@ -42,7 +42,7 @@ find_package(LibXml2 "2.9.14" REQUIRED)                           # libxml2-dev
 find_package(PkgConfig REQUIRED)                                  # pkg-config
 find_package(Gettext REQUIRED)
 
-pkg_check_modules(GLIB REQUIRED glib-2.0)                         # libglib2.0-dev
+pkg_check_modules(GLIB REQUIRED glib-2.0 gio-2.0)                 # libglib2.0-dev
 pkg_check_modules(NAUTILUS REQUIRED libnautilus-extension-4)      # libnautilus-extension-dev
 
 enable_testing()

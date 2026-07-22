@@ -14,6 +14,7 @@
       <w>fsanitize</w>
       <w>gfmt</w>
       <w>gmerge</w>
+      <w>gschema</w>
       <w>installxmlcatalogs</w>
       <w>lacv</w>
       <w>libargparse</w>
@@ -32,6 +33,7 @@
       <w>soversion</w>
       <w>stanag</w>
       <w>strdup</w>
+      <w>targetdir</w>
       <w>turnertech</w>
       <w>xgettext</w>
       <w>xmime</w>

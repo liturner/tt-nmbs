@@ -57,6 +57,7 @@ G_DEFINE_DYNAMIC_TYPE_EXTENDED(
 const char* const nmbs_column_classification_key = "nmbs::marking";
 const char* const nmbs_property_policy_key = "nmbs::policy";
 const char* const nmbs_property_classification_key = "nmbs::classification";
+const char* const nmbs_property_originator_key = "nmbs::originator";
 const char* const nmbs_file_has_label = "nmbs::file-has-label";
 const char* const nmbs_file_supports_label = "nmbs::file-supports-label";
 
@@ -114,6 +115,7 @@ static NautilusOperationResult nmbs_properties_update_file_info(
             auto const label = nmbs_confidentiality_labels_get(labels, i);
             auto const label_policy = nmbs_confidentiality_label_get_policy(label);
             auto const label_classification = nmbs_confidentiality_label_get_classification(label);
+            auto const label_originator = nmbs_confidentiality_label_get_originator_id(label);
 
             if (label == nullptr || !label_policy || !label_classification)
             {
@@ -129,6 +131,7 @@ static NautilusOperationResult nmbs_properties_update_file_info(
             nautilus_file_info_add_string_attribute(file, nmbs_column_classification_key, classification);
             nautilus_file_info_add_string_attribute(file, nmbs_property_policy_key, label_policy);
             nautilus_file_info_add_string_attribute(file, nmbs_property_classification_key, label_classification);
+            nautilus_file_info_add_string_attribute(file, nmbs_property_originator_key, label_originator);
             nautilus_file_info_add_string_attribute(file, nmbs_file_has_label, "TRUE");
 
             g_free(classification);
@@ -367,6 +370,7 @@ static GList* nmbs_properties_get_models(NautilusPropertiesModelProvider*, GList
 
     char* policy_identifier = nautilus_file_info_get_string_attribute(file, nmbs_property_policy_key);
     char* classification = nautilus_file_info_get_string_attribute(file, nmbs_property_classification_key);
+    char* originator_id = nautilus_file_info_get_string_attribute(file, nmbs_property_originator_key);
 
     if (!(policy_identifier && classification))
     {
@@ -377,20 +381,24 @@ static GList* nmbs_properties_get_models(NautilusPropertiesModelProvider*, GList
     NautilusPropertiesItem* policy_property = nautilus_properties_item_new(gettext("Policy Identifier"), policy_identifier);
     NautilusPropertiesItem* classification_property = nautilus_properties_item_new(gettext("Classification"), classification);
     NautilusPropertiesItem* creation_time_property = nautilus_properties_item_new(gettext("Classified On"), "");
-    NautilusPropertiesItem* originator_property = nautilus_properties_item_new(gettext("Classified By"), "");
     NautilusPropertiesItem* binding_property = nautilus_properties_item_new(gettext("Binding Profile"), ""); // TODO: The full URN here! Including version
 
     g_list_store_append(model_properties, policy_property);
     g_list_store_append(model_properties, classification_property);
     g_list_store_append(model_properties, creation_time_property);
-    g_list_store_append(model_properties, originator_property);
     g_list_store_append(model_properties, binding_property);
 
     g_object_unref(policy_property);
     g_object_unref(classification_property);
     g_object_unref(creation_time_property);
-    g_object_unref(originator_property);
     g_object_unref(binding_property);
+
+    if (originator_id)
+    {
+        NautilusPropertiesItem* originator_property = nautilus_properties_item_new(gettext("Classified By"), "");
+        g_list_store_append(model_properties, originator_property);
+        g_object_unref(originator_property);
+    }
 
     NautilusPropertiesModel* classification_model = nautilus_properties_model_new(gettext("Classification"), G_LIST_MODEL(model_properties));
     g_object_unref(model_properties);
